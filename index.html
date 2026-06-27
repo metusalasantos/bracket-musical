@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Bracket — torneio de faixas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #0B0E14;
+    --panel: #131722;
+    --card: #161B26;
+    --card-hover: #1C2230;
+    --line: #262C3B;
+    --line-soft: #1D2330;
+    --text: #E8EAF0;
+    --text-dim: #8089A0;
+    --text-faint: #5A6178;
+    --win: #C8FF4D;
+    --win-dim: #6F8A2C;
+    --lose: #FF5A5F;
+    --lose-dim: #8A3236;
+    --gold: #FFD166;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .display{
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== App shell ===== */
+  #app{
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  .top-bar{
+    display:flex;
+    align-items:baseline;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .brand{
+    font-family:'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  .brand .dot{ width:10px; height:10px; border-radius:50%; background:var(--win); flex-shrink:0; }
+
+  .top-meta{
+    font-size: 13px;
+    color: var(--text-dim);
+    display:flex;
+    gap:18px;
+    flex-wrap: wrap;
+  }
+  .top-meta b{ color: var(--text); font-weight:600; }
+
+  /* ===== Setup screen ===== */
+  .setup-wrap{
+    max-width: 720px;
+    margin: 40px auto;
+  }
+  .setup-wrap h1{
+    font-family:'Oswald', sans-serif;
+    font-size: 38px;
+    line-height: 1.15;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: 10px;
+  }
+  .setup-wrap h1 span{ color: var(--win); }
+  .setup-wrap p.lede{
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+    max-width: 560px;
+  }
+
+  label.field-label{
+    display:block;
+    font-size: 12px;
+    font-weight:600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+
+  textarea#raw-input{
+    width:100%;
+    min-height: 220px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Inter', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 16px;
+    resize: vertical;
+    transition: border-color .15s;
+  }
+  textarea#raw-input:focus{
+    outline:none;
+    border-color: var(--win-dim);
+  }
+  textarea#raw-input::placeholder{ color: var(--text-faint); }
+
+  .hint-row{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  .parsed-count{
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 16px;
+    min-height: 18px;
+  }
+  .parsed-count b{ color: var(--win); }
+  .parsed-count.warn b{ color: var(--lose); }
+
+  .setup-actions{
+    display:flex;
+    gap: 12px;
+    margin-top: 28px;
+    align-items:center;
+  }
+
+  button{
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary{
+    background: var(--win);
+    color: #11150A;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 26px;
+    border-radius: 8px;
+    transition: transform .1s, background .15s;
+  }
+  .btn-primary:hover{ background: #D6FF6E; }
+  .btn-primary:active{ transform: scale(0.98); }
+  .btn-primary:disabled{
+    background: var(--line);
+    color: var(--text-faint);
+    cursor: not-allowed;
+  }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    transition: border-color .15s, color .15s;
+  }
+  .btn-ghost:hover{ border-color: var(--text-faint); color: var(--text); }
+
+  .example-toggle{
+    font-size: 13px;
+    color: var(--text-faint);
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+    cursor: pointer;
+    margin-top: 14px;
+    display: inline-block;
+  }
+  .example-toggle:hover{ color: var(--text-dim); }
+
+  /* ===== Match screen ===== */
+  .match-screen{ display:none; }
+  .match-screen.active{ display:block; }
+
+  .progress-rail{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+  .progress-track{
+    flex:1;
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height: 100%;
+    background: var(--win);
+    border-radius: 2px;
+    transition: width .3s ease;
+  }
+
+  .stage-label{
+    text-align:center;
+    font-family:'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .stage-label.w{ color: var(--win); }
+  .stage-label.l{ color: var(--lose); }
+  .stage-label.gf{ color: var(--gold); }
+
+  .match-sub{
+    text-align:center;
+    font-size: 13px;
+    color: var(--text-faint);
+    margin-bottom: 28px;
+  }
+
+  .vs-arena{
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 24px;
+    align-items: stretch;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .vs-mark{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    font-size: 20px;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+  }
+
+  .contender{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color .15s, transform .1s;
+  }
+  .contender.bye{
+    opacity: 0.45;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+
+  .video-frame{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 8px;
+    overflow:hidden;
+  }
+  .video-frame iframe{
+    width:100%; height:100%; border:0;
+  }
+  .video-fallback{
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap: 10px;
+    text-align:center;
+    padding: 16px;
+    background: #0F1219;
+  }
+  .video-fallback img{
+    width:100%; height:100%;
+    object-fit: cover;
+    position:absolute; inset:0;
+    opacity: 0.35;
+  }
+  .video-fallback .fallback-msg{
+    position: relative;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    max-width: 220px;
+    line-height: 1.5;
+  }
+  .video-fallback .fallback-link{
+    position: relative;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--win);
+    text-decoration: none;
+    border: 1.5px solid var(--win-dim);
+    border-radius: 8px;
+    padding: 8px 14px;
+    transition: background .15s;
+  }
+  .video-fallback .fallback-link:hover{ background: rgba(200,255,77,0.1); }
+
+  .contender-title{
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .contender-meta{
+    font-size: 12px;
+    color: var(--text-faint);
+    display:flex;
+    justify-content: space-between;
+  }
+
+  .open-yt-link{
+    font-size: 12.5px;
+    color: var(--text-faint);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--text-faint);
+    align-self: flex-start;
+    margin-top: -4px;
+    transition: color .15s;
+  }
+  .open-yt-link:hover{ color: var(--text-dim); }
+
+  .btn-vote{
+    background: transparent;
+    border: 1.5px solid var(--win-dim);
+    color: var(--win);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: auto;
+    transition: background .15s, border-color .15s;
+  }
+  .btn-vote:hover{
+    background: rgba(200,255,77,0.1);
+    border-color: var(--win);
+  }
+  .btn-vote:active{ transform: scale(0.98); }
+
+  .record-pill{
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--text-faint);
+    align-self: flex-start;
+  }
+  .record-pill.danger{ border-color: var(--lose-dim); color: var(--lose); }
+
+  .skip-row{
+    text-align:center;
+    margin-top: 20px;
+  }
+  .skip-row button{
+    background:none;
+    color: var(--text-faint);
+    font-size: 13px;
+    text-decoration: underline;
+    text-decoration-color: var(--line);
+  }
+  .skip-row button:hover{ color:var(--text-dim); }
+
+  /* ===== Bracket view ===== */
+  .bracket-screen{ display:none; }
+  .bracket-screen.active{ display:block; }
+
+  .bracket-tabs{
+    display:flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .bracket-tab{
+    background:none;
+    color: var(--text-faint);
+    font-family:'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 4px;
+    border-bottom: 2px solid transparent;
+    margin-right: 20px;
+  }
+  .bracket-tab.active{ color: var(--text); border-bottom-color: var(--win); }
+  .bracket-tab .count{ color: var(--text-faint); font-family:'Inter'; font-size:11px; margin-left:4px; }
+
+  .bracket-scroll{
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+  .bracket-cols{
+    display:flex;
+    gap: 48px;
+    min-width: max-content;
+    padding: 8px 4px 24px;
+  }
+  .bracket-col{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    min-width: 220px;
+  }
+  .col-title{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-align:center;
+    margin-bottom: 4px;
+  }
+
+  .match-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 12.5px;
+  }
+  .match-card.gf{ border-color: var(--gold); }
+  .match-card .slot{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--line-soft);
+    gap: 6px;
+  }
+  .match-card .slot:last-child{ border-bottom:none; }
+  .match-card .slot.winner{ background: rgba(200,255,77,0.07); color: var(--win); font-weight:600; }
+  .match-card .slot.loser{ color: var(--text-faint); text-decoration: line-through; text-decoration-color: var(--text-faint); }
+  .match-card .slot.pending{ color: var(--text-dim); }
+  .match-card .slot.empty{ color: var(--text-faint); font-style: italic; }
+  .slot-name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+  .slot-tag{ font-size:10px; color:var(--text-faint); flex-shrink:0; }
+
+  .champion-banner{
+    margin: 36px auto 0;
+    max-width: 560px;
+    background: linear-gradient(180deg, rgba(255,209,102,0.08), transparent);
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 28px;
+    text-align:center;
+  }
+  .champion-banner .label{
+    font-family:'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .champion-banner .name{
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .bottom-nav{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top: 28px;
+  }
+
+  /* ===== misc ===== */
+  .sr-only{
+    position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);
+  }
+
+  @media (max-width: 720px){
+    .vs-arena{ grid-template-columns: 1fr; }
+    .vs-mark{ padding: 4px 0; }
+    .setup-wrap h1{ font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <div class="top-bar">
+    <div class="brand"><span class="dot"></span>BRACKET</div>
+    <div class="top-meta" id="top-meta"></div>
+  </div>
+
+  <!-- SETUP SCREEN -->
+  <div id="setup-screen">
+    <div class="setup-wrap">
+      <h1>Decida o <span>melhor</span> de todos.</h1>
+      <p class="lede">Cole os vídeos da sua playlist abaixo, um por linha. Aceita link completo do YouTube, link curto (youtu.be) ou só o ID de 11 caracteres. O título de cada vídeo é buscado automaticamente — só use o pipe se quiser um nome diferente: <code>https://youtu.be/ID | Nome da faixa</code>.</p>
+
+      <label class="field-label" for="raw-input">Cole sua lista</label>
+      <textarea id="raw-input" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ
+https://youtu.be/9bZkp7q19f0 | Gangnam Style
+3JZ_D3ELwOQ"></textarea>
+      <div class="hint-row">
+        <span>Mínimo 4 faixas · máximo 64</span>
+        <span id="parsed-inline"></span>
+      </div>
+
+      <div class="parsed-count" id="parsed-count"></div>
+
+      <div class="setup-actions">
+        <button class="btn-primary" id="start-btn" disabled>Gerar chave e começar ↗</button>
+        <button class="btn-ghost" id="example-btn">Usar lista de exemplo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATCH SCREEN -->
+  <div id="match-screen" class="match-screen">
+    <div class="progress-rail">
+      <span id="progress-label">0 / 0 confrontos</span>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="stage-label" id="stage-label">CHAVE PRINCIPAL — RODADA 1</div>
+    <div class="match-sub" id="match-sub">Confronto 1</div>
+
+    <div class="vs-arena" id="vs-arena"></div>
+
+    <div class="skip-row">
+      <button id="bracket-view-btn">Ver chave completa ↗</button>
+    </div>
+  </div>
+
+  <!-- BRACKET SCREEN -->
+  <div id="bracket-screen" class="bracket-screen">
+    <div class="bracket-tabs" id="bracket-tabs"></div>
+    <div class="bracket-scroll">
+      <div class="bracket-cols" id="bracket-cols"></div>
+    </div>
+    <div id="champion-zone"></div>
+    <div class="bottom-nav" id="bottom-nav"></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+/* =========================================================
+   1. PARSING DE ENTRADA
+   ========================================================= */
+
+function extractYoutubeId(line){
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+    /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+    /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for (const p of patterns){
+    const m = line.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+function parseInput(raw){
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+  const items = [];
+  const errors = [];
+  const seenIds = new Set();
+  lines.forEach((line, idx) => {
+    let title = null;
+    let urlPart = line;
+    if (line.includes('|')){
+      const parts = line.split('|');
+      urlPart = parts[0].trim();
+      title = parts.slice(1).join('|').trim();
+    }
+    const id = extractYoutubeId(urlPart);
+    if (!id){
+      errors.push({ line: idx + 1, text: line });
+      return;
+    }
+    if (seenIds.has(id)) return; // dedup silently
+    seenIds.add(id);
+    items.push({
+      id: id,
+      title: title || ('Vídeo ' + id),
+      titleSource: title ? 'manual' : 'placeholder',
+      videoId: id
+    });
+  });
+  return { items, errors };
+}
+
+/* =========================================================
+   2. ENGINE DO BRACKET (double elimination)
+   Estrutura fixa pré-computada: winners bracket clássico +
+   losers bracket com rodadas alternadas "pair" / "drop".
+   ========================================================= */
+
+function nextPow2(n){ return Math.pow(2, Math.ceil(Math.log2(n))); }
+
+function buildSeedOrder(size){
+  let seeds = [1];
+  while (seeds.length < size){
+    const len = seeds.length * 2;
+    const ns = [];
+    for (let i = 0; i < seeds.length; i++){
+      ns.push(seeds[i]);
+      ns.push(len + 1 - seeds[i]);
+    }
+    seeds = ns;
+  }
+  return seeds;
+}
+
+function createMatch(id, bracket, round){
+  return { id, bracket, round, slotA: null, slotB: null, winner: null, loser: null, played: false, isBye: false };
+}
+
+// Descreve as rodadas do losers bracket para k rodadas de winners (size = 2^k).
+// `matches` = numero de PARTIDAS naquela rodada (não de jogadores).
+// type 'pair'  -> repareia vencedores da rodada anterior do losers bracket entre si
+// type 'drop'  -> cruza vencedores da rodada anterior do losers bracket com
+//                 perdedores que acabaram de cair da rodada `fromWR` dos winners
+// Número total de rodadas = 2*(k-1), confirmado por testes exaustivos para k=2..6.
+function buildLosersStructure(k){
+  if (k < 2) return [];
+  const rounds = [];
+  let matches = Math.pow(2, k - 2);
+  rounds.push({ type: 'pair', matches, fromWR: null });
+  let wrToConsume = 2;
+  while (wrToConsume <= k){
+    rounds.push({ type: 'drop', matches, fromWR: wrToConsume });
+    wrToConsume++;
+    if (matches === 1) break; // essa drop round ja produz o campeão do losers bracket
+    matches = matches / 2;
+    rounds.push({ type: 'pair', matches, fromWR: null });
+  }
+  return rounds;
+}
+
+let state = null;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initTournament(items){
+  const shuffled = shuffle(items);
+  const n = shuffled.length;
+  const size = nextPow2(n);
+  const k = Math.log2(size);
+  const seedOrder = buildSeedOrder(size);
+  const padded = seedOrder.map(s => s <= n ? shuffled[s - 1] : null);
+
+  const winnersRounds = [];
+  const r1 = [];
+  for (let i = 0; i < size; i += 2){
+    const m = createMatch('W1M' + (i / 2 + 1), 'W', 1);
+    m.slotA = padded[i];
+    m.slotB = padded[i + 1];
+    r1.push(m);
+  }
+  winnersRounds.push(r1);
+  for (let r = 2; r <= k; r++){
+    const prev = winnersRounds[r - 2];
+    const round = [];
+    for (let i = 0; i < prev.length; i += 2) round.push(createMatch('W' + r + 'M' + (i / 2 + 1), 'W', r));
+    winnersRounds.push(round);
+  }
+
+  const lStructure = buildLosersStructure(k);
+  const losersRounds = lStructure.map((spec, idx) => {
+    const round = [];
+    for (let i = 0; i < spec.matches; i++) round.push(createMatch('L' + (idx + 1) + 'M' + (i + 1), 'L', idx + 1));
+    return round;
+  });
+
+  const grandFinal = createMatch('GF1', 'GF', 1);
+  const grandFinalReset = createMatch('GF2', 'GF', 2);
+  grandFinalReset.isReset = true;
+  grandFinalReset.active = false;
+
+  state = {
+    items: shuffled, size, k, seedOrder,
+    winnersRounds, losersRounds, lStructure,
+    grandFinal, grandFinalReset,
+    finished: false, champion: null
+  };
+
+  cascadeByes();
+}
+
+function isBye(m){
+  return (m.slotA === null) !== (m.slotB === null);
+}
+function autoResolveBye(m){
+  m.winner = m.slotA || m.slotB;
+  m.loser = null;
+  m.played = true;
+  m.isBye = true;
+}
+
+function winnersFeedTarget(match){
+  const r = match.round;
+  if (r < state.winnersRounds.length){
+    const round = state.winnersRounds[r - 1];
+    const idx = round.indexOf(match);
+    const nextRound = state.winnersRounds[r];
+    const nextIdx = Math.floor(idx / 2);
+    return { match: nextRound[nextIdx], slot: idx % 2 === 0 ? 'slotA' : 'slotB' };
+  }
+  return null; // era a final do winners bracket
+}
+
+function losersFeedTargetForWinnerOfMatch(match){
+  const lr = match.round;
+  const idx = state.losersRounds[lr - 1].indexOf(match);
+  if (lr === state.losersRounds.length) return null; // era a final do losers bracket
+  const nextRound = state.losersRounds[lr];
+  const spec = state.lStructure[lr];
+  if (spec.type === 'pair'){
+    const nextIdx = Math.floor(idx / 2);
+    return { match: nextRound[nextIdx], slot: idx % 2 === 0 ? 'slotA' : 'slotB' };
+  }
+  return { match: nextRound[idx], slot: 'slotA' };
+}
+
+function losersDropTargetForLoserOfWinners(wRound){
+  if (wRound === 1) return { roundIdx: 0, mode: 'pairFromWR1' };
+  const dropRoundIdx = state.lStructure.findIndex(s => s.type === 'drop' && s.fromWR === wRound);
+  return { roundIdx: dropRoundIdx, mode: 'drop' };
+}
+
+function placeLoserFromWinners(loserItem, wRound, wMatchIdxInRound){
+  if (loserItem === null) return;
+  if (state.losersRounds.length === 0){
+    // caso trivial (apenas 2 participantes): sem losers bracket, perdedor vai direto pra grande final
+    state.grandFinal.slotB = loserItem;
+    return;
+  }
+  const target = losersDropTargetForLoserOfWinners(wRound);
+  if (target.roundIdx === -1 || target.roundIdx >= state.losersRounds.length) return;
+  const round = state.losersRounds[target.roundIdx];
+  if (target.mode === 'pairFromWR1'){
+    const destIdx = Math.floor(wMatchIdxInRound / 2);
+    const destMatch = round[destIdx];
+    if (wMatchIdxInRound % 2 === 0) destMatch.slotA = loserItem; else destMatch.slotB = loserItem;
+  } else {
+    round[wMatchIdxInRound].slotB = loserItem;
+  }
+}
+
+function processWinnersResult(match){
+  const r = match.round;
+  const round = state.winnersRounds[r - 1];
+  const idx = round.indexOf(match);
+  const target = winnersFeedTarget(match);
+  if (target) target.match[target.slot] = match.winner;
+  else state.grandFinal.slotA = match.winner;
+  if (!match.isBye) placeLoserFromWinners(match.loser, r, idx);
+}
+
+function processLosersResult(match){
+  const target = losersFeedTargetForWinnerOfMatch(match);
+  if (target) target.match[target.slot] = match.winner;
+  else state.grandFinal.slotB = match.winner; // campeão do losers bracket
+}
+
+function isMatchReady(m){
+  return !!(m && !m.played && m.slotA && m.slotB);
+}
+
+function cascadeByes(){
+  let changed = true, guard = 0;
+  while (changed && guard < 500){
+    changed = false; guard++;
+    for (const round of state.winnersRounds) for (const m of round){
+      if (!m.played && isBye(m)){ autoResolveBye(m); processWinnersResult(m); changed = true; }
+    }
+    for (const round of state.losersRounds) for (const m of round){
+      if (!m.played && isBye(m)){ autoResolveBye(m); processLosersResult(m); changed = true; }
+    }
+  }
+}
+
+function getNextMatch(){
+  for (const round of state.winnersRounds) for (const m of round) if (isMatchReady(m)) return m;
+  for (const round of state.losersRounds) for (const m of round) if (isMatchReady(m)) return m;
+  if (isMatchReady(state.grandFinal)) return state.grandFinal;
+  if (state.grandFinalReset.active && isMatchReady(state.grandFinalReset)) return state.grandFinalReset;
+  return null;
+}
+
+function recordResult(match, winnerItem){
+  const loserItem = (match.slotA && match.slotA.videoId === winnerItem.videoId) ? match.slotB : match.slotA;
+  match.winner = winnerItem;
+  match.loser = loserItem;
+  match.played = true;
+
+  if (match.bracket === 'W'){
+    processWinnersResult(match);
+    cascadeByes();
+  } else if (match.bracket === 'L'){
+    processLosersResult(match);
+    cascadeByes();
+  } else if (match.id === 'GF1'){
+    if (winnerItem.videoId === match.slotA.videoId){
+      finishTournament(winnerItem);
+    } else {
+      state.grandFinalReset.active = true;
+      state.grandFinalReset.slotA = match.slotA;
+      state.grandFinalReset.slotB = winnerItem;
+    }
+  } else if (match.id === 'GF2'){
+    finishTournament(winnerItem);
+  }
+}
+
+function finishTournament(championItem){
+  state.finished = true;
+  state.champion = championItem;
+}
+
+function totalWinnersMatchesCount(){
+  return state.winnersRounds.reduce((s, r) => s + r.length, 0);
+}
+
+function totalPlayedSoFar(){
+  let played = 0, total = 0;
+  for (const round of state.winnersRounds) for (const m of round){ total++; if (m.played) played++; }
+  for (const round of state.losersRounds) for (const m of round){ total++; if (m.played) played++; }
+  total++; if (state.grandFinal.played) played++; // GF1
+  if (state.grandFinalReset.active){ total++; if (state.grandFinalReset.played) played++; }
+  return { played, total };
+}
+
+
+/* =========================================================
+   3. RENDER — TELA DE SETUP
+   ========================================================= */
+
+const setupScreen = document.getElementById('setup-screen');
+const matchScreen = document.getElementById('match-screen');
+const bracketScreen = document.getElementById('bracket-screen');
+const topMeta = document.getElementById('top-meta');
+const rawInput = document.getElementById('raw-input');
+const parsedCount = document.getElementById('parsed-count');
+const parsedInline = document.getElementById('parsed-inline');
+const startBtn = document.getElementById('start-btn');
+const exampleBtn = document.getElementById('example-btn');
+
+const EXAMPLE_LIST = [
+  'dQw4w9WgXcQ | Never Gonna Give You Up',
+  '9bZkp7q19f0 | Gangnam Style',
+  'kJQP7kiw5Fk | Despacito',
+  'JGwWNGJdvx8 | Shape of You',
+  'OPf0YbXqDm0 | Uptown Funk',
+  'fJ9rUzIMcZQ | Bohemian Rhapsody',
+  'CevxZvSJLk8 | Roar',
+  'pRpeEdMmmQ0 | Waka Waka',
+  'YQHsXMglC9A | Hello',
+  'RgKAFK5djSk | See You Again',
+  'hT_nvWreIhg | Counting Stars',
+  '60ItHLz5WEA | Faded'
+].join('\n');
+
+function updateParsedPreview(){
+  const raw = rawInput.value;
+  if (!raw.trim()){
+    parsedCount.textContent = '';
+    parsedInline.textContent = '';
+    startBtn.disabled = true;
+    return;
+  }
+  const { items, errors } = parseInput(raw);
+  parsedInline.textContent = items.length + ' reconhecidas';
+
+  if (items.length < 4){
+    parsedCount.className = 'parsed-count warn';
+    parsedCount.innerHTML = '<b>' + items.length + '</b> vídeo(s) reconhecido(s) — mínimo de 4 para montar a chave.';
+    startBtn.disabled = true;
+  } else if (items.length > 64){
+    parsedCount.className = 'parsed-count warn';
+    parsedCount.innerHTML = '<b>' + items.length + '</b> vídeos — o máximo suportado é 64. Remova alguns.';
+    startBtn.disabled = true;
+  } else {
+    parsedCount.className = 'parsed-count';
+    let msg = '<b>' + items.length + '</b> vídeos prontos para a chave';
+    if (errors.length){
+      msg += ' · <span style="color:var(--lose)">' + errors.length + ' linha(s) ignorada(s) por não parecerem um link/ID do YouTube</span>';
+    }
+    parsedCount.innerHTML = msg;
+    startBtn.disabled = false;
+  }
+}
+
+rawInput.addEventListener('input', updateParsedPreview);
+
+exampleBtn.addEventListener('click', () => {
+  rawInput.value = EXAMPLE_LIST;
+  updateParsedPreview();
+});
+
+async function fetchTitleFromOembed(videoId){
+  const url = 'https://www.youtube.com/oembed?url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + videoId) + '&format=json';
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
+  try {
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && data.title ? data.title : null;
+  } catch (e) {
+    clearTimeout(timeout);
+    return null;
+  }
+}
+
+async function fillMissingTitles(items){
+  const toFetch = items.filter(it => it.titleSource === 'placeholder');
+  if (toFetch.length === 0) return { fetchedCount: 0, failedCount: 0 };
+  let fetchedCount = 0, failedCount = 0;
+  // busca em paralelo, mas em lotes pequenos pra não disparar tudo de uma vez
+  const batchSize = 6;
+  for (let i = 0; i < toFetch.length; i += batchSize){
+    const batch = toFetch.slice(i, i + batchSize);
+    await Promise.all(batch.map(async (item) => {
+      const title = await fetchTitleFromOembed(item.videoId);
+      if (title){
+        item.title = title;
+        item.titleSource = 'oembed';
+        fetchedCount++;
+      } else {
+        failedCount++;
+      }
+    }));
+  }
+  return { fetchedCount, failedCount };
+}
+
+startBtn.addEventListener('click', async () => {
+  const { items } = parseInput(rawInput.value);
+  if (items.length < 4) return;
+
+  startBtn.disabled = true;
+  const originalLabel = startBtn.textContent;
+  startBtn.textContent = 'Buscando títulos dos vídeos...';
+
+  await fillMissingTitles(items);
+
+  startBtn.textContent = originalLabel;
+  startBtn.disabled = false;
+
+  initTournament(items);
+  setupScreen.style.display = 'none';
+  matchScreen.classList.add('active');
+  updateTopMeta();
+  renderCurrentMatch();
+});
+
+function updateTopMeta(){
+  if (!state) { topMeta.innerHTML = ''; return; }
+  const { played, total } = totalPlayedSoFar();
+  topMeta.innerHTML = `<span><b>${state.items.length}</b> faixas</span><span><b>${played}/${total}</b> confrontos</span>`;
+}
+
+/* =========================================================
+   4. RENDER — TELA DE CONFRONTO
+   ========================================================= */
+
+const vsArena = document.getElementById('vs-arena');
+const stageLabel = document.getElementById('stage-label');
+const matchSub = document.getElementById('match-sub');
+const progressFill = document.getElementById('progress-fill');
+const progressLabel = document.getElementById('progress-label');
+const bracketViewBtn = document.getElementById('bracket-view-btn');
+
+function stageLabelFor(match){
+  if (match.bracket === 'GF'){
+    return match.isReset ? { text: 'GRANDE FINAL — JOGO DECISIVO', cls: 'gf' } : { text: 'GRANDE FINAL', cls: 'gf' };
+  }
+  if (match.bracket === 'W'){
+    return { text: 'CHAVE PRINCIPAL — RODADA ' + match.round, cls: 'w' };
+  }
+  return { text: 'REPESCAGEM — RODADA ' + match.round, cls: 'l' };
+}
+
+function youtubeEmbed(videoId, frameId){
+  return `<iframe id="${frameId}" src="https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1" referrerpolicy="strict-origin-when-cross-origin" title="player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+}
+
+// Erros do player do YouTube que impedem a reprodução incorporada:
+// 100/2 = vídeo removido, privado ou inexistente; 101/150 = dono desativou embed; 153 = config negada (mesma causa, variante).
+const YT_EMBED_BLOCKED_CODES = [2, 100, 101, 150, 153];
+
+function showVideoFallback(frameId){
+  const iframe = document.getElementById(frameId);
+  const fallback = document.getElementById(frameId + '-fallback');
+  if (iframe) iframe.style.display = 'none';
+  if (fallback) fallback.style.display = 'flex';
+}
+
+let ytApiReady = false;
+let ytApiLoading = false;
+const pendingPlayerSetups = [];
+
+function loadYoutubeApi(){
+  if (ytApiReady || ytApiLoading) return;
+  ytApiLoading = true;
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+  window.onYouTubeIframeAPIReady = () => {
+    ytApiReady = true;
+    pendingPlayerSetups.forEach(fn => fn());
+    pendingPlayerSetups.length = 0;
+  };
+}
+
+function bindPlayerErrorHandling(frameId){
+  const setup = () => {
+    try {
+      new YT.Player(frameId, {
+        events: {
+          onError: (e) => {
+            if (YT_EMBED_BLOCKED_CODES.includes(e.data)) showVideoFallback(frameId);
+          }
+        }
+      });
+    } catch (e) { /* iframe pode já ter sido substituído por um confronto seguinte */ }
+  };
+  if (ytApiReady) setup();
+  else pendingPlayerSetups.push(setup);
+}
+
+function armYoutubeErrorListeners(container){
+  loadYoutubeApi();
+  container.querySelectorAll('.video-frame iframe').forEach(iframe => {
+    bindPlayerErrorHandling(iframe.id);
+  });
+}
+
+function videoFallback(item, frameId){
+  return `
+    <div class="video-fallback" id="${frameId}-fallback" style="display:none; position:relative;">
+      <img src="https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg" alt="" aria-hidden="true" />
+      <p class="fallback-msg">Esse vídeo não pode ser reproduzido aqui dentro. Dá para assistir direto no YouTube antes de votar.</p>
+      <a class="fallback-link" href="https://www.youtube.com/watch?v=${item.videoId}" target="_blank" rel="noopener">Abrir no YouTube ↗</a>
+    </div>
+  `;
+}
+
+function renderContenderCard(item, side, match){
+  if (!item){
+    return `<div class="contender bye"><span style="color:var(--text-faint); font-size:14px;">Aguardando definição</span></div>`;
+  }
+  const frameId = 'yt-' + side + '-' + match.id;
+  return `
+    <div class="contender" data-side="${side}">
+      <div class="video-frame">${youtubeEmbed(item.videoId, frameId)}${videoFallback(item, frameId)}</div>
+      <div class="contender-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div>
+      <a class="open-yt-link" href="https://www.youtube.com/watch?v=${item.videoId}" target="_blank" rel="noopener">Abrir no YouTube ↗</a>
+      <button class="btn-vote" data-side="${side}">Votar neste ↗</button>
+    </div>
+  `;
+}
+
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderCurrentMatch(){
+  if (state.finished){
+    showBracketScreen();
+    return;
+  }
+  const match = getNextMatch();
+  if (!match){
+    // não há partida jogável mas torneio não terminou — situação rara, vai pro bracket
+    showBracketScreen();
+    return;
+  }
+
+  const sl = stageLabelFor(match);
+  stageLabel.className = 'stage-label ' + sl.cls;
+  stageLabel.textContent = sl.text;
+  matchSub.textContent = match.bracket === 'GF' ? 'Decide o campeão da chave' : ('Confronto ' + match.id.replace(/^[WL]\d+/, '').replace('M',''));
+
+  vsArena.innerHTML = `
+    ${renderContenderCard(match.slotA, 'A', match)}
+    <div class="vs-mark">VS</div>
+    ${renderContenderCard(match.slotB, 'B', match)}
+  `;
+
+  vsArena.querySelectorAll('.btn-vote').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const side = btn.getAttribute('data-side');
+      const winnerItem = side === 'A' ? match.slotA : match.slotB;
+      recordResult(match, winnerItem);
+      updateTopMeta();
+      updateProgress();
+      renderCurrentMatch();
+    });
+  });
+
+  armYoutubeErrorListeners(vsArena);
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress(){
+  const { played, total } = totalPlayedSoFar();
+  const pct = total ? Math.round((played/total)*100) : 0;
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = played + ' / ' + total + ' confrontos decididos';
+}
+
+bracketViewBtn.addEventListener('click', showBracketScreen);
+
+/* =========================================================
+   5. RENDER — TELA DE CHAVE COMPLETA
+   ========================================================= */
+
+const bracketTabs = document.getElementById('bracket-tabs');
+const bracketCols = document.getElementById('bracket-cols');
+const championZone = document.getElementById('champion-zone');
+const bottomNav = document.getElementById('bottom-nav');
+
+let activeTab = 'W';
+
+function showBracketScreen(){
+  matchScreen.classList.remove('active');
+  bracketScreen.classList.add('active');
+  activeTab = 'W';
+  renderBracketScreen();
+}
+
+function showMatchScreen(){
+  bracketScreen.classList.remove('active');
+  matchScreen.classList.add('active');
+  renderCurrentMatch();
+}
+
+function renderBracketScreen(){
+  const tabs = [
+    { key: 'W', label: 'Chave principal', count: totalWinnersMatchesCount() },
+    { key: 'L', label: 'Repescagem', count: state.losersRounds.reduce((s,r)=>s+(r?r.length:0),0) },
+    { key: 'GF', label: 'Grande final', count: state.grandFinalReset.active ? 2 : 1 }
+  ];
+  bracketTabs.innerHTML = tabs.map(t =>
+    `<button class="bracket-tab ${t.key===activeTab?'active':''}" data-tab="${t.key}">${t.label}<span class="count">${t.count}</span></button>`
+  ).join('');
+  bracketTabs.querySelectorAll('.bracket-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = btn.getAttribute('data-tab');
+      renderBracketScreen();
+    });
+  });
+
+  let roundsToShow = [];
+  if (activeTab === 'W') roundsToShow = state.winnersRounds;
+  else if (activeTab === 'L') roundsToShow = state.losersRounds.filter(r => r && r.length);
+  else roundsToShow = state.grandFinalReset.active ? [[state.grandFinal], [state.grandFinalReset]] : [[state.grandFinal]];
+
+  bracketCols.innerHTML = roundsToShow.map((round, ri) => {
+    const titleMap = activeTab === 'W' ? ('Rodada ' + (ri+1)) :
+                      activeTab === 'L' ? ('Rodada ' + (ri+1)) :
+                      (ri === 0 ? 'Jogo 1' : 'Jogo decisivo');
+    return `
+      <div class="bracket-col">
+        <div class="col-title">${titleMap}</div>
+        ${round.map(m => renderMatchCard(m)).join('')}
+      </div>
+    `;
+  }).join('');
+
+  if (state.finished){
+    const champFrameId = 'yt-champion';
+    championZone.innerHTML = `
+      <div class="champion-banner">
+        <div class="label">Campeão da chave</div>
+        <div class="name">${escapeHtml(state.champion.title)}</div>
+        <div class="video-frame" style="max-width:480px; margin:0 auto;">${youtubeEmbed(state.champion.videoId, champFrameId)}${videoFallback(state.champion, champFrameId)}</div>
+      </div>
+    `;
+    armYoutubeErrorListeners(championZone);
+  } else {
+    championZone.innerHTML = '';
+  }
+
+  bottomNav.innerHTML = state.finished
+    ? `<button class="btn-ghost" id="restart-btn">Começar nova chave ↗</button>`
+    : `<button class="btn-primary" id="continue-btn">Continuar votando ↗</button>`;
+
+  const restartBtn = document.getElementById('restart-btn');
+  if (restartBtn) restartBtn.addEventListener('click', () => location.reload());
+  const continueBtn = document.getElementById('continue-btn');
+  if (continueBtn) continueBtn.addEventListener('click', showMatchScreen);
+}
+
+function renderMatchCard(m){
+  if (!m) return '';
+  const gfClass = m.bracket === 'GF' ? 'gf' : '';
+  const slotHtml = (item, isWinnerSlot, isLoserSlot) => {
+    if (!item){
+      return `<div class="slot empty"><span class="slot-name">a definir</span></div>`;
+    }
+    let cls = 'pending';
+    if (m.played){ cls = isWinnerSlot ? 'winner' : 'loser'; }
+    return `<div class="slot ${cls}"><span class="slot-name">${escapeHtml(item.title)}</span>${m.isBye && isWinnerSlot ? '<span class="slot-tag">bye</span>' : ''}</div>`;
+  };
+  const aIsWinner = m.played && m.winner && m.slotA && m.winner.videoId === m.slotA.videoId;
+  const bIsWinner = m.played && m.winner && m.slotB && m.winner.videoId === m.slotB.videoId;
+  return `
+    <div class="match-card ${gfClass}">
+      ${slotHtml(m.slotA, aIsWinner, m.played && !aIsWinner)}
+      ${slotHtml(m.slotB, bIsWinner, m.played && !bIsWinner)}
+    </div>
+  `;
+}
+
+/* init */
+updateParsedPreview();
+
+})();
+</script>
+</body>
+</html>
