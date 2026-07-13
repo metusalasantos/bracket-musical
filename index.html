@@ -1312,7 +1312,7 @@
 https://youtu.be/9bZkp7q19f0 | Gangnam Style
 3JZ_D3ELwOQ"></textarea>
         <div class="hint-row">
-          <span>Mínimo 6 faixas · máximo 64</span>
+          <span>Mínimo 6 faixas · sem limite máximo</span>
           <span id="parsed-inline"></span>
         </div>
         <div class="parsed-count" id="parsed-count"></div>
@@ -1500,12 +1500,12 @@ async function fetchPlaylistVideos(apiKey, playlistUrl){
       items.push({ id: videoId, title: it.snippet.title || ('Vídeo ' + videoId), titleSource: 'playlist', videoId });
     }
     pageToken = data.nextPageToken || '';
-  } while (pageToken && items.length < 64);
+  } while (pageToken && items.length < 500); // Increased limit to allow fetching more videos
 
   // dedup
   const seen = new Set();
   const deduped = items.filter(it => { if (seen.has(it.id)) return false; seen.add(it.id); return true; });
-  return deduped.slice(0, 64);
+  return deduped;
 }
 
 /* =========================================================
@@ -1971,12 +1971,10 @@ function updateParsedPreview(){
   if (items.length < 6){
     parsedCount.className = 'parsed-count warn';
     parsedCount.innerHTML = '<b>' + items.length + '</b> vídeo(s) reconhecido(s) — mínimo de 6 (pra fase suíça fazer sentido).';
-  } else if (items.length > 64){
-    parsedCount.className = 'parsed-count warn';
-    parsedCount.innerHTML = '<b>' + items.length + '</b> vídeos — o máximo suportado é 64. Remova alguns.';
   } else {
     parsedCount.className = 'parsed-count';
     let msg = '<b>' + items.length + '</b> vídeos prontos';
+    if (items.length > 64) msg += ' · <span style="color:var(--swiss)">' + (items.length - 64) + ' excedentes (serão selecionados ' + (itemOrder === 'random' ? 'aleatoriamente' : 'em ordem') + ')</span>';
     if (errors.length) msg += ' · <span style="color:var(--lose)">' + errors.length + ' linha(s) ignorada(s)</span>';
     parsedCount.innerHTML = msg;
   }
@@ -2005,7 +2003,9 @@ fetchPlaylistBtn.addEventListener('click', async () => {
     } else {
       playlistItems = items;
       playlistStatus.className = 'parsed-count';
-      playlistStatus.innerHTML = '<b>' + items.length + '</b> vídeos encontrados e prontos.' + (items.length === 64 ? ' (limite de 64 atingido — pode haver mais na playlist)' : '');
+      let msg = '<b>' + items.length + '</b> vídeos encontrados e prontos.';
+      if (items.length > 64) msg += ' · <span style="color:var(--swiss)">' + (items.length - 64) + ' excedentes (serão selecionados ' + (itemOrder === 'random' ? 'aleatoriamente' : 'em ordem') + ')</span>';
+      playlistStatus.innerHTML = msg;
     }
   } catch (e) {
     playlistStatus.className = 'parsed-count warn';
@@ -2020,7 +2020,7 @@ fetchPlaylistBtn.addEventListener('click', async () => {
 function updateStartButtonState(){
   if (activeSource === 'manual'){
     const { items } = parseManualInput(rawInput.value);
-    startBtn.disabled = items.length < 6 || items.length > 64;
+    startBtn.disabled = items.length < 6;
   } else {
     startBtn.disabled = !playlistItems || playlistItems.length < 6;
   }
@@ -2356,11 +2356,25 @@ if (orderRandom && orderKeep){
     itemOrder = 'random';
     orderRandom.classList.add('active');
     orderKeep.classList.remove('active');
+    // Update preview to show new selection method
+    if (activeSource === 'manual') updateParsedPreview();
+    if (activeSource === 'playlist' && playlistItems) {
+      let msg = '<b>' + playlistItems.length + '</b> vídeos encontrados e prontos.';
+      if (playlistItems.length > 64) msg += ' · <span style="color:var(--swiss)">' + (playlistItems.length - 64) + ' excedentes (serão selecionados ' + (itemOrder === 'random' ? 'aleatoriamente' : 'em ordem') + ')</span>';
+      playlistStatus.innerHTML = msg;
+    }
   });
   orderKeep.addEventListener('click', () => {
     itemOrder = 'keep';
     orderKeep.classList.add('active');
     orderRandom.classList.remove('active');
+    // Update preview to show new selection method
+    if (activeSource === 'manual') updateParsedPreview();
+    if (activeSource === 'playlist' && playlistItems) {
+      let msg = '<b>' + playlistItems.length + '</b> vídeos encontrados e prontos.';
+      if (playlistItems.length > 64) msg += ' · <span style="color:var(--swiss)">' + (playlistItems.length - 64) + ' excedentes (serão selecionados ' + (itemOrder === 'random' ? 'aleatoriamente' : 'em ordem') + ')</span>';
+      playlistStatus.innerHTML = msg;
+    }
   });
 }
 
@@ -2375,12 +2389,10 @@ startBtn.addEventListener('click', () => {
     fillMissingTitles(items).then(() => {
       startBtn.textContent = originalLabel;
       startBtn.disabled = false;
+      // Select 64 items if more than available
+      items = selectItems(items, itemOrder);
       // Adjust to ideal quantity
       items = adjustToIdealQuantity(items);
-      // Apply order preference
-      if (itemOrder === 'random'){
-        items = shuffle(items);
-      }
       beginSwissPhase(items);
     });
     return;
@@ -2388,14 +2400,27 @@ startBtn.addEventListener('click', () => {
     if (!playlistItems || playlistItems.length < 6) return;
     items = playlistItems;
   }
+  // Select 64 items if more than available
+  items = selectItems(items, itemOrder);
   // Adjust to ideal quantity
   items = adjustToIdealQuantity(items);
-  // Apply order preference
-  if (itemOrder === 'random'){
-    items = shuffle(items);
-  }
   beginSwissPhase(items);
 });
+
+function selectItems(items, order){
+  // If 64 or fewer items, return as is
+  if (items.length <= 64) return items;
+  
+  // Select 64 items based on order preference
+  if (order === 'random'){
+    // Random selection
+    const shuffled = shuffle(items);
+    return shuffled.slice(0, 64);
+  } else {
+    // Keep order - take first 64
+    return items.slice(0, 64);
+  }
+}
 
 function adjustToIdealQuantity(items){
   const n = items.length;
