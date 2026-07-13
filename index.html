@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>Bracket — torneio de faixas</title>
+<title>Bracket — track tournament</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=Roboto:wght@400;500;600&family=Open+Sans:wght@400;500;600&display=swap');
 
   :root{
     --bg: #0B0E14;
@@ -18,6 +18,7 @@
     --text: #E8EAF0;
     --text-dim: #8089A0;
     --text-faint: #5A6178;
+    --app-font: 'Inter';
 
     /* fase suíça */
     --swiss: #6FA3D8;
@@ -35,6 +36,170 @@
     --lose-bg: rgba(255,90,95,0.08);
 
     --gold: #FFD166;
+  }
+
+  /* Theme color schemes */
+  [data-theme="ayu"]{
+    --bg: #0F1419;
+    --panel: #131722;
+    --card: #1C2433;
+    --card-hover: #242E40;
+    --line: #2E3C50;
+    --line-soft: #3A4A5E;
+    --text: #E6E6E6;
+    --text-dim: #A0A0A0;
+    --text-faint: #707070;
+    --swiss: #73D2FF;
+    --swiss-dim: #4A9BC7;
+    --swiss-bg: rgba(115,210,255,0.1);
+    --win: #A6E22E;
+    --win-dim: #7CA522;
+    --win-bg: rgba(166,226,46,0.1);
+    --lose: #FF6B6B;
+    --lose-dim: #C74E4E;
+    --lose-bg: rgba(255,107,107,0.1);
+    --gold: #FFD700;
+  }
+  [data-theme="nord"]{
+    --bg: #2E3440;
+    --panel: #3B4252;
+    --card: #434C5E;
+    --card-hover: #4C566A;
+    --line: #4C566A;
+    --line-soft: #5E81AC;
+    --text: #D8DEE9;
+    --text-dim: #A3BE8C;
+    --text-faint: #88C0D0;
+    --swiss: #88C0D0;
+    --swiss-dim: #5E81AC;
+    --swiss-bg: rgba(136,192,208,0.1);
+    --win: #A3BE8C;
+    --win-dim: #8FBCBB;
+    --win-bg: rgba(163,190,140,0.1);
+    --lose: #BF616A;
+    --lose-dim: #D08770;
+    --lose-bg: rgba(191,97,106,0.1);
+    --gold: #EBCB8B;
+  }
+  [data-theme="catppuccin"]{
+    --bg: #1E1E2E;
+    --panel: #313244;
+    --card: #45475A;
+    --card-hover: #585B70;
+    --line: #45475A;
+    --line-soft: #585B70;
+    --text: #CDD6F4;
+    --text-dim: #A6ADC8;
+    --text-faint: #6C7086;
+    --swiss: #89B4FA;
+    --swiss-dim: #74C7EC;
+    --swiss-bg: rgba(137,180,250,0.1);
+    --win: #A6E3A1;
+    --win-dim: #94E2D5;
+    --win-bg: rgba(166,227,161,0.1);
+    --lose: #F38BA8;
+    --lose-dim: #FAB387;
+    --lose-bg: rgba(243,139,168,0.1);
+    --gold: #F9E2AF;
+  }
+  [data-theme="dracula"]{
+    --bg: #282A36;
+    --panel: #44475A;
+    --card: #44475A;
+    --card-hover: #6272A4;
+    --line: #44475A;
+    --line-soft: #6272A4;
+    --text: #F8F8F2;
+    --text-dim: #BD93F9;
+    --text-faint: #6272A4;
+    --swiss: #8BE9FD;
+    --swiss-dim: #6272A4;
+    --swiss-bg: rgba(139,233,253,0.1);
+    --win: #50FA7B;
+    --win-dim: #F1FA8C;
+    --win-bg: rgba(80,250,123,0.1);
+    --lose: #FF5555;
+    --lose-dim: #FF79C6;
+    --lose-bg: rgba(255,85,85,0.1);
+    --gold: #FFB86C;
+  }
+  [data-theme="oled"]{
+    --bg: #000000;
+    --panel: #0A0A0A;
+    --card: #111111;
+    --card-hover: #1A1A1A;
+    --line: #222222;
+    --line-soft: #333333;
+    --text: #FFFFFF;
+    --text-dim: #CCCCCC;
+    --text-faint: #888888;
+    --swiss: #00FFFF;
+    --swiss-dim: #008888;
+    --swiss-bg: rgba(0,255,255,0.1);
+    --win: #00FF00;
+    --win-dim: #008800;
+    --win-bg: rgba(0,255,0,0.1);
+    --lose: #FF0000;
+    --lose-dim: #880000;
+    --lose-bg: rgba(255,0,0,0.1);
+    --gold: #FFFF00;
+  }
+
+  /* Highlight color schemes - 1 color with 2 tones */
+  [data-colors="blue"]{
+    --swiss: #6FA3D8;
+    --swiss-dim: #4A7AA8;
+    --swiss-bg: rgba(111,163,216,0.1);
+    --win: #6FA3D8;
+    --win-dim: #4A7AA8;
+    --win-bg: rgba(111,163,216,0.15);
+    --lose: #4A7AA8;
+    --lose-dim: #3D6590;
+    --lose-bg: rgba(74,122,168,0.1);
+  }
+  [data-colors="purple"]{
+    --swiss: #A855F7;
+    --swiss-dim: #7C3AED;
+    --swiss-bg: rgba(168,85,247,0.1);
+    --win: #A855F7;
+    --win-dim: #7C3AED;
+    --win-bg: rgba(168,85,247,0.15);
+    --lose: #7C3AED;
+    --lose-dim: #6B28B0;
+    --lose-bg: rgba(124,58,237,0.1);
+  }
+  [data-colors="cyan"]{
+    --swiss: #06B6D4;
+    --swiss-dim: #0891B2;
+    --swiss-bg: rgba(6,182,212,0.1);
+    --win: #06B6D4;
+    --win-dim: #0891B2;
+    --win-bg: rgba(6,182,212,0.15);
+    --lose: #0891B2;
+    --lose-dim: #155E75;
+    --lose-bg: rgba(8,145,178,0.1);
+  }
+  [data-colors="green"]{
+    --swiss: #4ADE80;
+    --swiss-dim: #22C55E;
+    --swiss-bg: rgba(74,222,128,0.1);
+    --win: #4ADE80;
+    --win-dim: #22C55E;
+    --win-bg: rgba(74,222,128,0.15);
+    --lose: #22C55E;
+    --lose-dim: #16A34A;
+    --lose-bg: rgba(34,197,94,0.1);
+  }
+  [data-colors="orange"]{
+    --swiss: #FB923C;
+    --swiss-dim: #F97316;
+    --swiss-bg: rgba(251,146,60,0.1);
+    --win: #FB923C;
+    --win-dim: #F97316;
+    --win-bg: rgba(251,146,60,0.15);
+    --lose: #F97316;
+    --lose-dim: #EA580C;
+    --lose-bg: rgba(249,115,22,0.1);
   }
 
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -69,8 +234,158 @@
     gap: 14px;
   }
 
+  .settings-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .settings-btn{
+    background:transparent;
+    border:none;
+    color:var(--text-dim);
+    font-size:18px;
+    padding:8px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:color .15s, background .15s;
+  }
+  .settings-btn:hover{
+    color:var(--text);
+    background:var(--line-soft);
+  }
+  .settings-btn.active{
+    color:var(--win);
+    background:var(--win-bg);
+  }
+
+  /* Settings Popup */
+  .settings-popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 400px;
+    max-width: 90vw;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    z-index: 2000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+  }
+  .settings-popup.open{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .popup-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 1999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .popup-overlay.open{ opacity: 1; pointer-events: auto; }
+  .popup-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .popup-header h3{
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  .popup-close{
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .popup-close:hover{ background: var(--line-soft); color: var(--text); }
+  .popup-content{
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .popup-section{
+    margin-bottom: 24px;
+  }
+  .popup-label{
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .theme-options,
+  .color-options,
+  .lang-options,
+  .font-options,
+  .video-size-options{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .theme-option,
+  .color-option,
+  .lang-option,
+  .font-option,
+  .video-size-option{
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .theme-option:hover,
+  .color-option:hover,
+  .lang-option:hover,
+  .font-option:hover,
+  .video-size-option:hover{
+    border-color: var(--text-faint);
+    color: var(--text);
+  }
+  .theme-option.active,
+  .color-option.active,
+  .lang-option.active,
+  .font-option.active,
+  .video-size-option.active{
+    border-color: var(--win);
+    color: var(--win);
+    background: var(--win-bg);
+  }
+  .color-preview{
+    width: 100%;
+    height: 20px;
+    border-radius: 3px;
+  }
+
   .brand{
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-weight: 700;
     font-size: 20px;
     letter-spacing: 0.03em;
@@ -87,7 +402,7 @@
     align-items:center;
   }
   .phase-pill{
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -128,7 +443,7 @@
     margin: 40px auto;
   }
   .setup-wrap h1{
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-size: 36px;
     line-height: 1.15;
     font-weight: 700;
@@ -160,7 +475,7 @@
     padding: 14px 16px;
   }
   .format-step .step-num{
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -271,6 +586,38 @@
     align-items:center;
     flex-wrap: wrap;
   }
+  .setup-actions .btn-primary{ width: 100%; }
+
+  .setup-options{
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .order-toggle{
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .order-btn{
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .order-btn:hover{
+    border-color: var(--text-faint);
+    color: var(--text);
+  }
+  .order-btn.active{
+    border-color: var(--win);
+    color: var(--win);
+    background: var(--win-bg);
+  }
 
   button{ font-family: 'Inter', sans-serif; cursor: pointer; border: none; }
 
@@ -366,7 +713,7 @@
   .stage-banner.gf{ background: rgba(255,209,102,0.08); border-color: var(--gold); }
 
   .stage-label{
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-size: 15px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -390,13 +737,14 @@
     align-items: stretch;
     max-width: 1100px;
     margin: 0 auto;
+    padding: 0 20px;
   }
 
   .vs-mark{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-family:'Oswald', sans-serif;
+    font-family:'Oswald', var(--app-font), sans-serif;
     font-weight:700;
     font-size: 20px;
     color: var(--text-faint);
@@ -465,6 +813,7 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 
@@ -513,9 +862,8 @@
     align-items: start;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 20px;
   }
-
-  .swiss-match-col{}
 
   .live-standings{
     position: sticky;
@@ -534,7 +882,7 @@
     border-bottom: 1px solid var(--line);
   }
   .live-standings-header .title{
-    font-family: 'Oswald', sans-serif;
+    font-family: 'Oswald', var(--app-font), sans-serif;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -714,37 +1062,73 @@
   .bracket-screen{ display:none; }
   .bracket-screen.active{ display:block; }
 
-  .bracket-tabs{ display:flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
-  .bracket-tab{
-    background:none;
-    color: var(--text-faint);
+  .bracket-layout{ display:flex; flex-direction: column; gap: 40px; }
+  
+  .bracket-section{ margin-bottom: 16px; }
+  .bracket-section-title{
     font-family:'Oswald', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 10px 4px;
-    border-bottom: 2px solid transparent;
-    margin-right: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--line);
   }
-  .bracket-tab.active{ color: var(--text); }
-  .bracket-tab.active.tab-win{ border-bottom-color: var(--win); color: var(--win); }
-  .bracket-tab.active.tab-lose{ border-bottom-color: var(--lose); color: var(--lose); }
-  .bracket-tab.active.tab-gf{ border-bottom-color: var(--gold); color: var(--gold); }
-  .bracket-tab .count{ color: var(--text-faint); font-family:'Inter'; font-size:11px; margin-left:4px; }
+  .bracket-section-title.winners{ color: var(--win); border-color: var(--win-dim); }
+  .bracket-section-title.losers{ color: var(--lose); border-color: var(--lose-dim); }
+  .bracket-section-title.grand-final{ color: var(--gold); border-color: var(--gold); }
 
-  .bracket-scroll{ overflow-x: auto; padding-bottom: 16px; }
-  .bracket-cols{ display:flex; gap: 48px; min-width: max-content; padding: 8px 4px 24px; }
-  .bracket-col{ display:flex; flex-direction: column; justify-content: center; gap: 24px; min-width: 220px; }
-  .col-title{ font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); text-align:center; margin-bottom: 4px; }
+  .bracket-scroll{ overflow-x: auto; padding-bottom: 20px; }
+  .bracket-cols{ display:flex; gap: 60px; min-width: max-content; padding: 12px 20px 28px; }
+  .bracket-col{ display:flex; flex-direction: column; justify-content: center; gap: 16px; min-width: 200px; }
+  .col-title{ font-family:'Oswald', var(--app-font), sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-dim); text-align:center; margin-bottom: 8px; font-weight: 600; }
 
-  .match-card{ background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; font-size: 12.5px; }
+  .match-card{ background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; font-size: 12.5px; transition: all .2s; }
   .match-card.gf{ border-color: var(--gold); }
+  .match-card.current{ border: 2px solid var(--win); box-shadow: 0 0 12px rgba(200,255,77,0.3); transform: scale(1.02); }
   .match-card .slot{ display:flex; justify-content: space-between; align-items:center; padding: 9px 10px; border-bottom: 1px solid var(--line-soft); gap: 6px; }
   .match-card .slot:last-child{ border-bottom:none; }
   .match-card .slot.winner{ background: rgba(200,255,77,0.07); color: var(--win); font-weight:600; }
   .match-card .slot.loser{ color: var(--text-faint); text-decoration: line-through; text-decoration-color: var(--text-faint); }
   .match-card .slot.pending{ color: var(--text-dim); }
   .slot-name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+
+  /* Bracket preview on match screen */
+  .bracket-preview-section{
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .bracket-preview-title{
+    font-family:'Oswald', var(--app-font), sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .bracket-preview-section .bracket-scroll{
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .bracket-preview-section .bracket-cols{
+    gap: 32px;
+    padding: 0 20px;
+  }
+  .bracket-preview-section .bracket-col{
+    min-width: 180px;
+  }
+  .bracket-preview-section .match-card{
+    font-size: 11px;
+  }
+  .bracket-preview-section .match-card .slot{
+    padding: 6px 8px;
+  }
+  .bracket-preview-section .col-title{
+    font-size: 10px;
+  }
 
   .champion-banner{
     margin: 36px auto 0;
@@ -774,6 +1158,33 @@
     .vs-mark{ padding: 4px 0; }
     .setup-wrap h1{ font-size: 26px; }
     .format-explainer{ flex-direction: column; }
+    .bracket-cols{ gap: 32px; }
+    .bracket-col{ min-width: 160px; }
+  }
+
+  @media (max-width: 600px){
+    .setup-wrap h1{ font-size: 22px; }
+    .setup-wrap p.lede{ font-size: 14px; }
+    .format-step{ padding: 16px; }
+    .format-step p{ font-size: 13px; }
+    .vs-arena{ gap: 16px; }
+    .contender{ padding: 14px; }
+    .video-frame{ min-height: 180px; }
+    .bracket-cols{ gap: 24px; }
+    .bracket-col{ min-width: 140px; }
+    .match-card{ font-size: 11px; }
+    .match-card .slot{ padding: 6px 8px; }
+    .order-toggle{ flex-direction: column; }
+    .order-btn{ width: 100%; }
+  }
+
+  @media (max-width: 400px){
+    .setup-wrap h1{ font-size: 18px; }
+    .setup-wrap p.lede{ font-size: 13px; }
+    .vs-arena{ gap: 12px; }
+    .contender{ padding: 12px; }
+    .video-frame{ min-height: 150px; }
+    .btn-vote{ padding: 10px; font-size: 13px; }
   }
 </style>
 </head>
@@ -784,6 +1195,88 @@
   <div class="top-bar">
     <div class="brand"><span class="dot"></span>BRACKET</div>
     <div id="phase-pills-zone"></div>
+    <div class="settings-row">
+      <button class="settings-btn" id="settings-toggle" title="Settings">⚙️</button>
+    </div>
+
+    <!-- Settings Popup -->
+    <div id="settings-popup" class="settings-popup">
+      <div class="popup-header">
+        <h3 id="settings-title">Settings</h3>
+        <button class="popup-close" id="popup-close">✕</button>
+      </div>
+      <div class="popup-content">
+        <!-- Theme -->
+        <div class="popup-section">
+          <div class="popup-label" id="sidebar-theme">Theme</div>
+          <div class="theme-options">
+            <button class="theme-option" data-theme="ayu" id="theme-ayu">Ayu-like</button>
+            <button class="theme-option" data-theme="nord" id="theme-nord">Nord-like</button>
+            <button class="theme-option" data-theme="catppuccin" id="theme-catppuccin">Catppuccin-like</button>
+            <button class="theme-option" data-theme="dracula" id="theme-dracula">Dracula-like</button>
+            <button class="theme-option" data-theme="oled" id="theme-oled">OLED</button>
+          </div>
+        </div>
+
+        <!-- Highlight Colors -->
+        <div class="popup-section">
+          <div class="popup-label" id="sidebar-highlight-colors">Highlight Colors</div>
+          <div class="color-options">
+            <button class="color-option" data-colors="blue" title="Blue tones">
+              <span class="color-preview" style="background: linear-gradient(90deg, #6FA3D8 50%, #4A7AA8 50%);"></span>
+              <span id="color-blue">Blue</span>
+            </button>
+            <button class="color-option" data-colors="purple" title="Purple tones">
+              <span class="color-preview" style="background: linear-gradient(90deg, #A855F7 50%, #7C3AED 50%);"></span>
+              <span id="color-purple">Purple</span>
+            </button>
+            <button class="color-option" data-colors="cyan" title="Cyan tones">
+              <span class="color-preview" style="background: linear-gradient(90deg, #06B6D4 50%, #0891B2 50%);"></span>
+              <span id="color-cyan">Cyan</span>
+            </button>
+            <button class="color-option" data-colors="green" title="Green tones">
+              <span class="color-preview" style="background: linear-gradient(90deg, #4ADE80 50%, #22C55E 50%);"></span>
+              <span id="color-green">Green</span>
+            </button>
+            <button class="color-option" data-colors="orange" title="Orange tones">
+              <span class="color-preview" style="background: linear-gradient(90deg, #FB923C 50%, #F97316 50%);"></span>
+              <span id="color-orange">Orange</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Language -->
+        <div class="popup-section">
+          <div class="popup-label" id="sidebar-language">Language</div>
+          <div class="lang-options">
+            <button class="lang-option" data-lang="en" id="lang-en">English</button>
+            <button class="lang-option" data-lang="pt" id="lang-pt">Português</button>
+            <button class="lang-option" data-lang="es" id="lang-es">Español</button>
+          </div>
+        </div>
+
+        <!-- Font -->
+        <div class="popup-section">
+          <div class="popup-label" id="sidebar-font">Font</div>
+          <div class="font-options">
+            <button class="font-option active" data-font="inter" id="font-inter">Inter</button>
+            <button class="font-option" data-font="roboto" id="font-roboto">Roboto</button>
+            <button class="font-option" data-font="opensans" id="font-opensans">Open Sans</button>
+          </div>
+        </div>
+
+        <!-- Video Size -->
+        <div class="popup-section">
+          <div class="popup-label" id="sidebar-video-size">Video Size</div>
+          <div class="video-size-options">
+            <button class="video-size-option" data-size="small" id="size-small">Small</button>
+            <button class="video-size-option active" data-size="medium" id="size-medium">Medium</button>
+            <button class="video-size-option" data-size="large" id="size-large">Large</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="popup-overlay" class="popup-overlay"></div>
     <div class="top-meta" id="top-meta"></div>
   </div>
 
@@ -842,6 +1335,14 @@ https://youtu.be/9bZkp7q19f0 | Gangnam Style
         <div class="parsed-count" id="playlist-status"></div>
       </div>
 
+      <div class="setup-options">
+        <div class="field-label">Ordem dos itens</div>
+        <div class="order-toggle">
+          <button class="order-btn active" data-order="random" id="order-random">Aleatória</button>
+          <button class="order-btn" data-order="keep" id="order-keep">Manter ordem</button>
+        </div>
+      </div>
+
       <div class="setup-actions">
         <button class="btn-primary" id="start-btn" disabled>Iniciar fase suíça ↗</button>
       </div>
@@ -894,6 +1395,13 @@ https://youtu.be/9bZkp7q19f0 | Gangnam Style
     </div>
 
     <div class="vs-arena" id="vs-arena"></div>
+
+    <div class="bracket-preview-section">
+      <div class="bracket-preview-title">Chaveamento em tempo real</div>
+      <div class="bracket-scroll preview">
+        <div class="bracket-cols" id="match-bracket-cols"></div>
+      </div>
+    </div>
 
     <div class="skip-row">
       <button id="bracket-view-btn">Ver chave completa ↗</button>
@@ -1037,6 +1545,7 @@ async function fillMissingTitles(items){
    ========================================================= */
 
 let swiss = null;
+let swissMatchupHistory = new Set(); // Track all matchup pairs to avoid repeats
 
 function createSwissState(items){
   const players = items.map(it => ({
@@ -1044,7 +1553,13 @@ function createSwissState(items){
     opponents: new Set(),
     status: 'active'
   }));
+  swissMatchupHistory.clear(); // Clear history for new tournament
   return { players, round: 0, currentPairs: null, pairIndex: 0 };
+}
+
+function getMatchupKey(id1, id2){
+  // Create a consistent key for a matchup regardless of order
+  return [id1, id2].sort().join('|');
 }
 
 function swissActivePlayers(){ return swiss.players.filter(p => p.status === 'active'); }
@@ -1072,10 +1587,19 @@ function swissPairRound(){
     const unpaired = [...group];
     while (unpaired.length >= 2){
       const p1 = unpaired.shift();
-      let idx = unpaired.findIndex(p2 => !p1.opponents.has(p2.item.id));
+      // First try to find someone who hasn't played against p1 AND hasn't played against them in history
+      let idx = unpaired.findIndex(p2 => 
+        !p1.opponents.has(p2.item.id) && 
+        !swissMatchupHistory.has(getMatchupKey(p1.item.id, p2.item.id))
+      );
+      // If no perfect match, try someone who hasn't played against p1 (current round only)
+      if (idx === -1) idx = unpaired.findIndex(p2 => !p1.opponents.has(p2.item.id));
+      // If still no match, take anyone
       if (idx === -1) idx = 0;
       const p2 = unpaired.splice(idx, 1)[0];
       matches.push([p1, p2]);
+      // Record this matchup in history
+      swissMatchupHistory.add(getMatchupKey(p1.item.id, p2.item.id));
     }
     if (unpaired.length === 1) floater = unpaired[0];
   }
@@ -1410,18 +1934,22 @@ let activeSource = 'manual';
 let playlistItems = null; // populado depois de buscar com sucesso
 
 const EXAMPLE_LIST = [
-  'dQw4w9WgXcQ | Never Gonna Give You Up',
-  '9bZkp7q19f0 | Gangnam Style',
-  'kJQP7kiw5Fk | Despacito',
-  'JGwWNGJdvx8 | Shape of You',
-  'OPf0YbXqDm0 | Uptown Funk',
-  'fJ9rUzIMcZQ | Bohemian Rhapsody',
-  'CevxZvSJLk8 | Roar',
-  'pRpeEdMmmQ0 | Waka Waka',
-  'YQHsXMglC9A | Hello',
-  'RgKAFK5djSk | See You Again',
-  'hT_nvWreIhg | Counting Stars',
-  '60ItHLz5WEA | Faded'
+  'dQw4w9WgXcQ',
+  '9bZkp7q19f0',
+  'kJQP7kiw5Fk',
+  'JGwWNGJdvx8',
+  'OPf0YbXqDm0',
+  'fJ9rUzIMcZQ',
+  'CevxZvSJLk8',
+  'pRpeEdMmmQ0',
+  'YQHsXMglC9A',
+  'RgKAFK5djSk',
+  'hT_nvWreIhg',
+  '60ItHLz5WEA',
+  '09R8_2nJtjg',
+  'PT2_F-1esPk',
+  'nfWlot6h_JM',
+  'IQJkKp0vv8Y'
 ].join('\n');
 
 [tabManual, tabPlaylist].forEach(tab => {
@@ -1497,25 +2025,6 @@ function updateStartButtonState(){
     startBtn.disabled = !playlistItems || playlistItems.length < 6;
   }
 }
-
-startBtn.addEventListener('click', async () => {
-  let items;
-  if (activeSource === 'manual'){
-    items = parseManualInput(rawInput.value).items;
-    if (items.length < 6) return;
-    startBtn.disabled = true;
-    const originalLabel = startBtn.textContent;
-    startBtn.textContent = 'Buscando títulos dos vídeos...';
-    await fillMissingTitles(items);
-    startBtn.textContent = originalLabel;
-  } else {
-    if (!playlistItems || playlistItems.length < 6) return;
-    items = playlistItems;
-  }
-  startBtn.disabled = false;
-
-  beginSwissPhase(items);
-});
 
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1838,6 +2347,95 @@ startPlayoffsBtn.addEventListener('click', () => {
   renderCurrentMatch();
 });
 
+// Order toggle
+let itemOrder = 'random'; // 'random' or 'keep'
+const orderRandom = document.getElementById('order-random');
+const orderKeep = document.getElementById('order-keep');
+if (orderRandom && orderKeep){
+  orderRandom.addEventListener('click', () => {
+    itemOrder = 'random';
+    orderRandom.classList.add('active');
+    orderKeep.classList.remove('active');
+  });
+  orderKeep.addEventListener('click', () => {
+    itemOrder = 'keep';
+    orderKeep.classList.add('active');
+    orderRandom.classList.remove('active');
+  });
+}
+
+startBtn.addEventListener('click', () => {
+  let items;
+  if (activeSource === 'manual'){
+    items = parseManualInput(rawInput.value).items;
+    if (items.length < 6) return;
+    startBtn.disabled = true;
+    const originalLabel = startBtn.textContent;
+    startBtn.textContent = 'Buscando títulos dos vídeos...';
+    fillMissingTitles(items).then(() => {
+      startBtn.textContent = originalLabel;
+      startBtn.disabled = false;
+      // Adjust to ideal quantity
+      items = adjustToIdealQuantity(items);
+      // Apply order preference
+      if (itemOrder === 'random'){
+        items = shuffle(items);
+      }
+      beginSwissPhase(items);
+    });
+    return;
+  } else {
+    if (!playlistItems || playlistItems.length < 6) return;
+    items = playlistItems;
+  }
+  // Adjust to ideal quantity
+  items = adjustToIdealQuantity(items);
+  // Apply order preference
+  if (itemOrder === 'random'){
+    items = shuffle(items);
+  }
+  beginSwissPhase(items);
+});
+
+function adjustToIdealQuantity(items){
+  const n = items.length;
+  const idealQuantities = [8, 16, 32, 64];
+  
+  // If already at ideal quantity, return as is
+  if (idealQuantities.includes(n)) return items;
+  
+  // Find nearest ideal quantity
+  let nearest = idealQuantities[0];
+  let minDiff = Math.abs(n - nearest);
+  
+  for (const qty of idealQuantities){
+    const diff = Math.abs(n - qty);
+    if (diff < minDiff){
+      minDiff = diff;
+      nearest = qty;
+    }
+  }
+  
+  // If current quantity is closer than the difference to nearest, don't adjust
+  if (Math.abs(n - nearest) > n * 0.3){
+    return items; // Don't adjust if it would remove more than 30%
+  }
+  
+  // Adjust to nearest ideal quantity
+  if (n < nearest){
+    // Need to add items - pad with nulls (will be handled as byes)
+    const padding = nearest - n;
+    for (let i = 0; i < padding; i++){
+      items.push({ id: 'bye-' + i, title: 'BYE', videoId: '', isBye: true });
+    }
+  } else {
+    // Need to remove items - remove from end
+    items = items.slice(0, nearest);
+  }
+  
+  return items;
+}
+
 function showDirectChampion(championItem){
   // caso raro: só 1 classificado na suíça, vira campeão direto sem playoffs
   bracketScreen.classList.add('active');
@@ -1906,6 +2504,71 @@ function renderCurrentMatch(){
   armYoutubeErrorListeners(vsArena);
   updateProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  
+  // Render bracket preview
+  renderBracketPreview();
+}
+
+function renderBracketPreview(){
+  const currentMatch = getNextMatch();
+  const currentMatchId = currentMatch ? currentMatch.id : null;
+  
+  let html = '<div class="bracket-layout">';
+  
+  // Winners bracket section (including Grand Final)
+  html += '<div class="bracket-section winners-section">';
+  html += '<div class="bracket-scroll">';
+  html += '<div class="bracket-cols">';
+  
+  state.winnersRounds.forEach((round, ri) => {
+    html += '<div class="bracket-col">';
+    html += '<div class="col-title">R' + (ri+1) + '</div>';
+    round.forEach(m => {
+      const isCurrent = m.id === currentMatchId;
+      html += renderMatchCard(m, isCurrent);
+    });
+    html += '</div>';
+  });
+  
+  // Add Grand Final to winners bracket
+  html += '<div class="bracket-col">';
+  html += '<div class="col-title">GF</div>';
+  const isCurrent = state.grandFinal.id === currentMatchId;
+  html += renderMatchCard(state.grandFinal, isCurrent);
+  if (state.grandFinalReset.active){
+    html += '<div class="col-title">Reset</div>';
+    const isResetCurrent = state.grandFinalReset.id === currentMatchId;
+    html += renderMatchCard(state.grandFinalReset, isResetCurrent);
+  }
+  html += '</div>';
+  
+  html += '</div>';
+  html += '</div>';
+  html += '</div>';
+  
+  // Losers bracket section
+  if (state.losersRounds.length > 0){
+    html += '<div class="bracket-section losers-section">';
+    html += '<div class="bracket-scroll">';
+    html += '<div class="bracket-cols">';
+    
+    state.losersRounds.forEach((round, ri) => {
+      html += '<div class="bracket-col">';
+      html += '<div class="col-title">L' + (ri+1) + '</div>';
+      round.forEach(m => {
+        const isCurrent = m.id === currentMatchId;
+        html += renderMatchCard(m, isCurrent);
+      });
+      html += '</div>';
+    });
+    
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+  }
+  
+  html += '</div>';
+  document.getElementById('match-bracket-cols').innerHTML = html;
 }
 
 function updateProgress(){
@@ -1943,32 +2606,69 @@ function showMatchScreen(){
 }
 
 function renderBracketScreen(){
-  const tabs = [
-    { key: 'W', label: 'Chave principal', count: totalWinnersMatchesCount(), cls: 'tab-win' },
-    { key: 'L', label: 'Repescagem', count: state.losersRounds.reduce((s,r)=>s+r.length,0), cls: 'tab-lose' },
-    { key: 'GF', label: 'Grande final', count: state.grandFinalReset.active ? 2 : 1, cls: 'tab-gf' }
-  ];
-  bracketTabs.innerHTML = tabs.map(t =>
-    `<button class="bracket-tab ${t.key===activeTab?'active '+t.cls:''}" data-tab="${t.key}">${t.label}<span class="count">${t.count}</span></button>`
-  ).join('');
-  bracketTabs.querySelectorAll('.bracket-tab').forEach(btn => {
-    btn.addEventListener('click', () => { activeTab = btn.getAttribute('data-tab'); renderBracketScreen(); });
+  bracketTabs.innerHTML = '';
+  
+  const currentMatch = getNextMatch();
+  const currentMatchId = currentMatch ? currentMatch.id : null;
+  
+  let html = '<div class="bracket-layout">';
+  
+  // Winners bracket section (including Grand Final)
+  html += '<div class="bracket-section winners-section">';
+  html += '<div class="bracket-section-title winners">CHAVE PRINCIPAL</div>';
+  html += '<div class="bracket-scroll">';
+  html += '<div class="bracket-cols">';
+  
+  state.winnersRounds.forEach((round, ri) => {
+    html += '<div class="bracket-col">';
+    html += '<div class="col-title">Rodada ' + (ri+1) + '</div>';
+    round.forEach(m => {
+      const isCurrent = m.id === currentMatchId;
+      html += renderMatchCard(m, isCurrent);
+    });
+    html += '</div>';
   });
-
-  let roundsToShow = [];
-  if (activeTab === 'W') roundsToShow = state.winnersRounds;
-  else if (activeTab === 'L') roundsToShow = state.losersRounds;
-  else roundsToShow = state.grandFinalReset.active ? [[state.grandFinal], [state.grandFinalReset]] : [[state.grandFinal]];
-
-  bracketCols.innerHTML = roundsToShow.map((round, ri) => {
-    const titleMap = activeTab === 'GF' ? (ri === 0 ? 'Jogo 1' : 'Jogo decisivo') : ('Rodada ' + (ri+1));
-    return `
-      <div class="bracket-col">
-        <div class="col-title">${titleMap}</div>
-        ${round.map(m => renderMatchCard(m)).join('')}
-      </div>
-    `;
-  }).join('');
+  
+  // Add Grand Final to winners bracket
+  html += '<div class="bracket-col">';
+  html += '<div class="col-title">Grande Final</div>';
+  const isCurrent = state.grandFinal.id === currentMatchId;
+  html += renderMatchCard(state.grandFinal, isCurrent);
+  if (state.grandFinalReset.active){
+    html += '<div class="col-title">Jogo Decisivo</div>';
+    const isResetCurrent = state.grandFinalReset.id === currentMatchId;
+    html += renderMatchCard(state.grandFinalReset, isResetCurrent);
+  }
+  html += '</div>';
+  
+  html += '</div>';
+  html += '</div>';
+  html += '</div>';
+  
+  // Losers bracket section
+  if (state.losersRounds.length > 0){
+    html += '<div class="bracket-section losers-section">';
+    html += '<div class="bracket-section-title losers">REPESCAGEM</div>';
+    html += '<div class="bracket-scroll">';
+    html += '<div class="bracket-cols">';
+    
+    state.losersRounds.forEach((round, ri) => {
+      html += '<div class="bracket-col">';
+      html += '<div class="col-title">Rodada ' + (ri+1) + '</div>';
+      round.forEach(m => {
+        const isCurrent = m.id === currentMatchId;
+        html += renderMatchCard(m, isCurrent);
+      });
+      html += '</div>';
+    });
+    
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+  }
+  
+  html += '</div>';
+  bracketCols.innerHTML = html;
 
   if (state.finished){
     const champFrameId = 'yt-champion';
@@ -1993,9 +2693,10 @@ function renderBracketScreen(){
   if (continueBtn) continueBtn.addEventListener('click', showMatchScreen);
 }
 
-function renderMatchCard(m){
+function renderMatchCard(m, isCurrent = false){
   if (!m) return '';
   const gfClass = m.bracket === 'GF' ? 'gf' : '';
+  const currentClass = isCurrent ? 'current' : ''
   const slotHtml = (item, isWinnerSlot) => {
     if (!item) return `<div class="slot pending"><span class="slot-name">a definir</span></div>`;
     let cls = 'pending';
@@ -2005,12 +2706,589 @@ function renderMatchCard(m){
   const aIsWinner = m.played && m.winner && m.slotA && m.winner.videoId === m.slotA.videoId;
   const bIsWinner = m.played && m.winner && m.slotB && m.winner.videoId === m.slotB.videoId;
   return `
-    <div class="match-card ${gfClass}">
+    <div class="match-card ${gfClass} ${currentClass}">
       ${slotHtml(m.slotA, aIsWinner)}
       ${slotHtml(m.slotB, bIsWinner)}
     </div>
   `;
 }
+
+/* =========================================================
+   10. SETTINGS — THEME & LANGUAGE
+   ========================================================= */
+
+// Simple inline event handlers for settings
+document.addEventListener('DOMContentLoaded', () => {
+  // Settings popup toggle
+  const settingsToggle = document.getElementById('settings-toggle');
+  const settingsPopup = document.getElementById('settings-popup');
+  const popupClose = document.getElementById('popup-close');
+  const popupOverlay = document.getElementById('popup-overlay');
+  
+  function openPopup(){
+    settingsPopup.classList.add('open');
+    popupOverlay.classList.add('open');
+  }
+  
+  function closePopup(){
+    settingsPopup.classList.remove('open');
+    popupOverlay.classList.remove('open');
+  }
+  
+  if (settingsToggle){
+    settingsToggle.addEventListener('click', openPopup);
+  }
+  
+  if (popupClose){
+    popupClose.addEventListener('click', closePopup);
+  }
+  
+  if (popupOverlay){
+    popupOverlay.addEventListener('click', closePopup);
+  }
+  
+  // Theme
+  const themeOptions = document.querySelectorAll('.theme-option');
+  const savedTheme = localStorage.getItem('bracket-theme') || 'ayu';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeOptions.forEach(btn => {
+    if (btn.getAttribute('data-theme') === savedTheme){
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      const theme = btn.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('bracket-theme', theme);
+      themeOptions.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  
+  // Highlight colors
+  const colorOptions = document.querySelectorAll('.color-option');
+  const savedColors = localStorage.getItem('bracket-colors') || 'blue';
+  document.documentElement.setAttribute('data-colors', savedColors);
+  colorOptions.forEach(btn => {
+    if (btn.getAttribute('data-colors') === savedColors){
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      const colors = btn.getAttribute('data-colors');
+      document.documentElement.setAttribute('data-colors', colors);
+      localStorage.setItem('bracket-colors', colors);
+      colorOptions.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  
+  // Language
+  const langOptions = document.querySelectorAll('.lang-option');
+  const savedLang = localStorage.getItem('bracket-lang') || 'en';
+  applyLanguage(savedLang);
+  langOptions.forEach(btn => {
+    if (btn.getAttribute('data-lang') === savedLang){
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      const lang = btn.getAttribute('data-lang');
+      localStorage.setItem('bracket-lang', lang);
+      applyLanguage(lang);
+      langOptions.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  
+  // Font
+  const fontOptions = document.querySelectorAll('.font-option');
+  const savedFont = localStorage.getItem('bracket-font') || 'inter';
+  applyFont(savedFont);
+  fontOptions.forEach(btn => {
+    if (btn.getAttribute('data-font') === savedFont){
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      const font = btn.getAttribute('data-font');
+      localStorage.setItem('bracket-font', font);
+      applyFont(font);
+      fontOptions.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  
+  // Video size
+  const videoSizeOptions = document.querySelectorAll('.video-size-option');
+  const savedVideoSize = localStorage.getItem('bracket-video-size') || 'medium';
+  applyVideoSize(savedVideoSize);
+  videoSizeOptions.forEach(btn => {
+    if (btn.getAttribute('data-size') === savedVideoSize){
+      btn.classList.add('active');
+    }
+    btn.addEventListener('click', () => {
+      const size = btn.getAttribute('data-size');
+      localStorage.setItem('bracket-video-size', size);
+      applyVideoSize(size);
+      videoSizeOptions.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+});
+
+function applyFont(font){
+  const fonts = {
+    inter: 'Inter',
+    roboto: 'Roboto',
+    opensans: 'Open Sans'
+  };
+  const fontName = fonts[font] || 'Inter';
+  document.documentElement.style.setProperty('--app-font', "'" + fontName + "'");
+  document.body.style.fontFamily = "'" + fontName + "', sans-serif";
+}
+
+function applyVideoSize(size){
+  const sizes = {
+    small: 'min-height: 120px',
+    medium: 'min-height: 200px',
+    large: 'min-height: 280px'
+  };
+  const sizeStyle = sizes[size] || sizes.medium;
+  const videoFrames = document.querySelectorAll('.video-frame');
+  videoFrames.forEach(frame => {
+    frame.style = sizeStyle;
+  });
+}
+
+/* Translation system */
+const translations = {
+  en: {
+    title: 'Bracket — track tournament',
+    setupTitle: 'Decide the <span>best</span> of all.',
+    setupLede: 'Two-phase format: first a <b style="color:var(--swiss)">Swiss stage</b> qualifier, then <b style="color:var(--win)">double elimination playoffs</b> for those who qualify.',
+    phase1: 'PHASE 1 · SWISS',
+    phase1Desc: 'Each track plays until getting <b>3 wins</b> (qualifies for playoffs) or suffering <b>3 losses</b> (eliminated). Opponents matched by similar performance.',
+    phase2: 'PHASE 2 · WINNERS BRACKET',
+    phase2Desc: 'Those who qualified compete in double elimination. Losing once doesn\'t eliminate — you drop to losers bracket.',
+    phase3: 'PHASE 2 · LOSERS BRACKET',
+    phase3Desc: 'Second chance for those who lost once in winners bracket. Only eliminated on second loss.',
+    tabManual: 'Paste list',
+    tabPlaylist: 'Playlist link',
+    labelRawInput: 'Paste your list',
+    labelApiKey: 'Your YouTube Data API key',
+    apiKeyHint: 'Free — generate yours at <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a> (enable "YouTube Data API v3" first). Stays only in this browser session, never sent to me.',
+    labelPlaylistUrl: 'Playlist link',
+    fetchBtn: 'Fetch videos ↗',
+    startBtn: 'Start Swiss phase ↗',
+    minVideos: 'Minimum 6 tracks · maximum 64',
+    exampleBtn: 'Use example list',
+    swissStage: 'SWISS PHASE — ROUND',
+    swissSub: '3 wins advance to playoffs · 3 losses eliminated',
+    liveStandings: 'Live standings',
+    standingsLegend: '▲▼ movement',
+    zonePlayoffs: '🏆 Playoffs zone',
+    zoneOneWin: '▲ 1 win to advance',
+    zoneBattle: '⚔ In contention',
+    zoneDanger: '▼ 1 loss from elimination',
+    zoneEliminated: '✕ Eliminated',
+    voteBtn: 'Vote for this ↗',
+    openYt: 'Open on YouTube ↗',
+    transitionTitle: 'SWISS PHASE COMPLETED',
+    transitionH2: 'Playoffs set',
+    transitionSub: 'These tracks will compete in double elimination:',
+    startPlayoffs: 'Start playoffs ↗',
+    stageWinners: 'WINNERS BRACKET — ROUND',
+    stageLosers: 'LOSERS BRACKET — ROUND',
+    stageGf: 'GRAND FINAL',
+    stageGfReset: 'GRAND FINAL — DECIDING GAME',
+    matchSubWin: 'Losing here still gives a second chance in losers bracket',
+    matchSubLose: 'Losing now eliminates for good',
+    matchSubGf: 'Decides the bracket champion',
+    bracketViewBtn: 'View full bracket ↗',
+    continueBtn: 'Continue voting ↗',
+    restartBtn: 'Start new bracket ↗',
+    championLabel: 'Bracket champion',
+    videoFallback: 'This video cannot be played here. You can watch directly on YouTube before voting.',
+    fallbackLink: 'Open on YouTube ↗',
+    settingsTitle: 'Settings',
+    theme: 'Theme',
+    themeAyu: 'Ayu-like',
+    themeNord: 'Nord-like',
+    themeCatppuccin: 'Catppuccin-like',
+    themeDracula: 'Dracula-like',
+    themeOled: 'OLED',
+    highlightColors: 'Highlight Colors',
+    colorBlue: 'Blue',
+    colorPurple: 'Purple',
+    colorCyan: 'Cyan',
+    colorGreen: 'Green',
+    colorOrange: 'Orange',
+    language: 'Language',
+    font: 'Font',
+    videoSize: 'Video Size',
+    sizeSmall: 'Small',
+    sizeMedium: 'Medium',
+    sizeLarge: 'Large',
+    orderLabel: 'Item Order',
+    orderRandom: 'Random',
+    orderKeep: 'Keep order'
+  },
+  pt: {
+    title: 'Bracket — torneio de faixas',
+    setupTitle: 'Decida o <span>melhor</span> de todos.',
+    setupLede: 'Formato em duas fases: primeiro uma <b style="color:var(--swiss)">fase suíça</b> classificatória, depois <b style="color:var(--win)">playoffs em eliminação dupla</b> entre quem se classificar.',
+    phase1: 'FASE 1 · SUÍÇA',
+    phase1Desc: 'Cada faixa joga até conseguir <b>3 vitórias</b> (classifica pros playoffs) ou sofrer <b>3 derrotas</b> (eliminada). Adversários sorteados por desempenho parecido.',
+    phase2: 'FASE 2 · CHAVE PRINCIPAL',
+    phase2Desc: 'Quem se classificou disputa em eliminação dupla. Perder uma vez não elimina — você cai para a repescagem.',
+    phase3: 'FASE 2 · REPESCAGEM',
+    phase3Desc: 'Segunda chance pra quem perdeu uma vez na chave principal. Só é eliminado de fato na segunda derrota.',
+    tabManual: 'Colar lista',
+    tabPlaylist: 'Link de playlist',
+    labelRawInput: 'Cole sua lista',
+    labelApiKey: 'Sua chave da YouTube Data API',
+    apiKeyHint: 'Gratuita — gere a sua em <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a> (ative a "YouTube Data API v3" antes). Fica só nesta sessão do navegador, nunca é enviada a mim.',
+    labelPlaylistUrl: 'Link da playlist',
+    fetchBtn: 'Buscar vídeos ↗',
+    startBtn: 'Iniciar fase suíça ↗',
+    minVideos: 'Mínimo 6 faixas · máximo 64',
+    exampleBtn: 'Usar lista de exemplo',
+    swissStage: 'FASE SUÍÇA — RODADA',
+    swissSub: 'Quem vence 3 vai pros playoffs · quem perde 3 está fora',
+    liveStandings: 'Classificação ao vivo',
+    standingsLegend: '▲▼ mudança',
+    zonePlayoffs: '🏆 Zona de playoffs',
+    zoneOneWin: '▲ A 1 vitória de avançar',
+    zoneBattle: '⚔ Em disputa',
+    zoneDanger: '▼ A 1 derrota de cair',
+    zoneEliminated: '✕ Eliminados',
+    voteBtn: 'Votar neste ↗',
+    openYt: 'Abrir no YouTube ↗',
+    transitionTitle: 'FASE SUÍÇA CONCLUÍDA',
+    transitionH2: 'Playoffs definidos',
+    transitionSub: 'Estas faixas vão disputar a eliminação dupla:',
+    startPlayoffs: 'Começar playoffs ↗',
+    stageWinners: 'CHAVE PRINCIPAL — RODADA',
+    stageLosers: 'REPESCAGEM — RODADA',
+    stageGf: 'GRANDE FINAL',
+    stageGfReset: 'GRANDE FINAL — JOGO DECISIVO',
+    matchSubWin: 'Perder aqui ainda dá uma segunda chance na repescagem',
+    matchSubLose: 'Perder agora elimina de vez',
+    matchSubGf: 'Decide o campeão da chave',
+    bracketViewBtn: 'Ver chave completa ↗',
+    continueBtn: 'Continuar votando ↗',
+    restartBtn: 'Começar nova chave ↗',
+    championLabel: 'Campeão da chave',
+    videoFallback: 'Esse vídeo não pode ser reproduzido aqui. Dá para assistir direto no YouTube antes de votar.',
+    fallbackLink: 'Abrir no YouTube ↗',
+    settingsTitle: 'Configurações',
+    theme: 'Tema',
+    themeAyu: 'Tipo Ayu',
+    themeNord: 'Tipo Nord',
+    themeCatppuccin: 'Tipo Catppuccin',
+    themeDracula: 'Tipo Dracula',
+    themeOled: 'OLED',
+    highlightColors: 'Cores de destaque',
+    colorBlue: 'Azul',
+    colorPurple: 'Roxo',
+    colorCyan: 'Ciano',
+    colorGreen: 'Verde',
+    colorOrange: 'Laranja',
+    language: 'Idioma',
+    font: 'Fonte',
+    videoSize: 'Tamanho do vídeo',
+    sizeSmall: 'Pequeno',
+    sizeMedium: 'Médio',
+    sizeLarge: 'Grande',
+    orderLabel: 'Ordem dos itens',
+    orderRandom: 'Aleatória',
+    orderKeep: 'Manter ordem'
+  },
+  es: {
+    title: 'Bracket — torneo de pistas',
+    setupTitle: 'Decide el <span>mejor</span> de todos.',
+    setupLede: 'Formato de dos fases: primero una <b style="color:var(--swiss)">fase suiza</b> clasificatoria, luego <b style="color:var(--win)">playoffs de eliminación doble</b> entre quienes se clasifiquen.',
+    phase1: 'FASE 1 · SUIZA',
+    phase1Desc: 'Cada pista juega hasta conseguir <b>3 victorias</b> (clasifica a playoffs) o sufrir <b>3 derrotas</b> (eliminada). Oponentes emparejados por rendimiento similar.',
+    phase2: 'FASE 2 · LLAVE PRINCIPAL',
+    phase2Desc: 'Quienes se clasificaron compiten en eliminación doble.Perder una vez no elimina — caes a repesca.',
+    phase3: 'FASE 2 · REPESCA',
+    phase3Desc: 'Segunda oportunidad para quienes perdieron una vez en la llave principal. Solo se elimina en la segunda derrota.',
+    tabManual: 'Pegar lista',
+    tabPlaylist: 'Link de playlist',
+    labelRawInput: 'Pega tu lista',
+    labelApiKey: 'Tu clave de YouTube Data API',
+    apiKeyHint: 'Gratis — genera la tuya en <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a> (habilita "YouTube Data API v3" primero). Se queda solo en esta sesión del navegador, nunca me la envías.',
+    labelPlaylistUrl: 'Link de playlist',
+    fetchBtn: 'Buscar videos ↗',
+    startBtn: 'Iniciar fase suiza ↗',
+    minVideos: 'Mínimo 6 pistas · máximo 64',
+    exampleBtn: 'Usar lista de ejemplo',
+    swissStage: 'FASE SUIZA — RONDA',
+    swissSub: '3 victorias avanzan a playoffs · 3 derrotas eliminan',
+    liveStandings: 'Clasificación en vivo',
+    standingsLegend: '▲▼ movimiento',
+    zonePlayoffs: '🏆 Zona de playoffs',
+    zoneOneWin: '▲ 1 victoria para avanzar',
+    zoneBattle: '⚔ En contienda',
+    zoneDanger: '▼ 1 derrota de eliminación',
+    zoneEliminated: '✕ Eliminado',
+    voteBtn: 'Votar por este ↗',
+    openYt: 'Abrir en YouTube ↗',
+    transitionTitle: 'FASE SUIZA COMPLETADA',
+    transitionH2: 'Playoffs definidos',
+    transitionSub: 'Estas pistas competirán en eliminación doble:',
+    startPlayoffs: 'Comenzar playoffs ↗',
+    stageWinners: 'LLAVE PRINCIPAL — RONDA',
+    stageLosers: 'REPESCA — RONDA',
+    stageGf: 'GRAN FINAL',
+    stageGfReset: 'GRAN FINAL — JUEGO DECISIVO',
+    matchSubWin: 'Perder aquí todavía da una segunda oportunidad en repesca',
+    matchSubLose: 'Perder ahora elimina definitivamente',
+    matchSubGf: 'Decide el campeón de la llave',
+    bracketViewBtn: 'Ver llave completa ↗',
+    continueBtn: 'Continuar votando ↗',
+    restartBtn: 'Comenzar nueva llave ↗',
+    championLabel: 'Campeón de la llave',
+    videoFallback: 'Este video no puede reproducirse aquí. Puedes verlo directamente en YouTube antes de votar.',
+    fallbackLink: 'Abrir en YouTube ↗',
+    settingsTitle: 'Configuración',
+    theme: 'Tema',
+    themeAyu: 'Tipo Ayu',
+    themeNord: 'Tipo Nord',
+    themeCatppuccin: 'Tipo Catppuccin',
+    themeDracula: 'Tipo Dracula',
+    themeOled: 'OLED',
+    highlightColors: 'Colores de resaltado',
+    colorBlue: 'Azul',
+    colorPurple: 'Morado',
+    colorCyan: 'Cian',
+    colorGreen: 'Verde',
+    colorOrange: 'Naranja',
+    language: 'Idioma',
+    font: 'Fuente',
+    videoSize: 'Tamaño de video',
+    sizeSmall: 'Pequeño',
+    sizeMedium: 'Medio',
+    sizeLarge: 'Grande',
+    orderLabel: 'Orden de elementos',
+    orderRandom: 'Aleatorio',
+    orderKeep: 'Mantener orden'
+  }
+};
+
+function applyLanguage(lang) {
+  const t = translations[lang];
+  if (!t) return;
+  
+  document.title = t.title;
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+  
+  // Update setup screen
+  const setupH1 = document.querySelector('.setup-wrap h1');
+  if (setupH1) setupH1.innerHTML = t.setupTitle;
+  
+  const setupLede = document.querySelector('.setup-wrap p.lede');
+  if (setupLede) setupLede.innerHTML = t.setupLede;
+  
+  const swissStep = document.querySelector('.format-step.s-swiss .step-num');
+  if (swissStep) swissStep.textContent = t.phase1;
+  
+  const swissDesc = document.querySelector('.format-step.s-swiss p');
+  if (swissDesc) swissDesc.innerHTML = t.phase1Desc;
+  
+  const winStep = document.querySelector('.format-step.s-win .step-num');
+  if (winStep) winStep.textContent = t.phase2;
+  
+  const winDesc = document.querySelector('.format-step.s-win p');
+  if (winDesc) winDesc.innerHTML = t.phase2Desc;
+  
+  const loseStep = document.querySelector('.format-step.s-lose .step-num');
+  if (loseStep) loseStep.textContent = t.phase3;
+  
+  const loseDesc = document.querySelector('.format-step.s-lose p');
+  if (loseDesc) loseDesc.innerHTML = t.phase3Desc;
+  
+  const tabManual = document.getElementById('tab-manual');
+  if (tabManual) tabManual.textContent = t.tabManual;
+  
+  const tabPlaylist = document.getElementById('tab-playlist');
+  if (tabPlaylist) tabPlaylist.textContent = t.tabPlaylist;
+  
+  const labelRawInput = document.querySelector('#panel-manual label');
+  if (labelRawInput) labelRawInput.textContent = t.labelRawInput;
+  
+  const labelApiKey = document.querySelector('#panel-playlist label');
+  if (labelApiKey) labelApiKey.textContent = t.labelApiKey;
+  
+  const apiKeyHint = document.querySelector('#panel-playlist .field-hint');
+  if (apiKeyHint) apiKeyHint.innerHTML = t.apiKeyHint;
+  
+  const playlistLabels = document.querySelectorAll('#panel-playlist label');
+  if (playlistLabels.length > 1) playlistLabels[1].textContent = t.labelPlaylistUrl;
+  
+  const placeholder = document.getElementById('raw-input');
+  if (placeholder) placeholder.placeholder = t.labelRawInput;
+  
+  const fetchBtn = document.getElementById('fetch-playlist-btn');
+  if (fetchBtn) fetchBtn.textContent = t.fetchBtn;
+  
+  const startBtn = document.getElementById('start-btn');
+  if (startBtn) startBtn.textContent = t.startBtn;
+  
+  const hintRowSpan = document.querySelector('.hint-row span');
+  if (hintRowSpan) hintRowSpan.textContent = t.minVideos;
+  
+  const exampleBtn = document.getElementById('example-btn');
+  if (exampleBtn) exampleBtn.textContent = t.exampleBtn;
+  
+  // Playoff elements
+  const swissStageLabel = document.getElementById('swiss-stage-label');
+  if (swissStageLabel) swissStageLabel.textContent = t.swissStage + ' 1';
+  
+  const swissStageSub = document.getElementById('swiss-stage-sub');
+  if (swissStageSub) swissStageSub.textContent = t.swissSub;
+  
+  const liveStandingsTitle = document.querySelector('.live-standings-header .title');
+  if (liveStandingsTitle) liveStandingsTitle.textContent = t.liveStandings;
+  
+  const standingsLegend = document.querySelector('.live-standings-header .legend');
+  if (standingsLegend) standingsLegend.textContent = t.standingsLegend;
+  
+  const stageLabel = document.getElementById('stage-label');
+  if (stageLabel) {
+    if (currentPhase === 'swiss') {
+      stageLabel.textContent = t.swissStage + ' ' + (swiss ? swiss.round : 1);
+    }
+  }
+  
+  const matchSub = document.getElementById('match-sub');
+  if (matchSub) {
+    if (currentPhase === 'playoffs-w') {
+      matchSub.textContent = t.matchSubWin;
+    } else if (currentPhase === 'playoffs-l') {
+      matchSub.textContent = t.matchSubLose;
+    } else if (currentPhase === 'playoffs-gf') {
+      matchSub.textContent = t.matchSubGf;
+    }
+  }
+  
+  const transitionBadge = document.querySelector('.badge');
+  if (transitionBadge) transitionBadge.textContent = t.transitionTitle;
+  
+  const transitionH2 = document.querySelector('#transition-screen h2');
+  if (transitionH2) transitionH2.textContent = t.transitionH2;
+  
+  const transitionSub = document.getElementById('transition-sub');
+  if (transitionSub) transitionSub.textContent = t.transitionSub;
+  
+  const startPlayoffsBtn = document.getElementById('start-playoffs-btn');
+  if (startPlayoffsBtn) startPlayoffsBtn.textContent = t.startPlayoffs;
+  
+  const bracketViewBtn = document.getElementById('bracket-view-btn');
+  if (bracketViewBtn) bracketViewBtn.textContent = t.bracketViewBtn;
+  
+  const continueBtn = document.getElementById('continue-btn');
+  if (continueBtn) continueBtn.textContent = t.continueBtn;
+  
+  const restartBtn = document.getElementById('restart-btn');
+  if (restartBtn) restartBtn.textContent = t.restartBtn;
+  
+  const championLabel = document.querySelector('.champion-banner .label');
+  if (championLabel) championLabel.textContent = t.championLabel;
+  
+  const videoFallbackMsg = document.querySelectorAll('.fallback-msg');
+  videoFallbackMsg.forEach(el => el.textContent = t.videoFallback);
+  
+  const videoFallbackLinks = document.querySelectorAll('.fallback-link');
+  videoFallbackLinks.forEach(el => el.textContent = t.fallbackLink);
+  
+  // Settings popup
+  const sidebarTitle = document.getElementById('settings-title');
+  if (sidebarTitle) sidebarTitle.textContent = t.settingsTitle;
+  
+  const themeLabel = document.getElementById('sidebar-theme');
+  if (themeLabel) themeLabel.textContent = t.theme;
+  
+  const themeAyu = document.getElementById('theme-ayu');
+  if (themeAyu) themeAyu.textContent = t.themeAyu;
+  
+  const themeNord = document.getElementById('theme-nord');
+  if (themeNord) themeNord.textContent = t.themeNord;
+  
+  const themeCatppuccin = document.getElementById('theme-catppuccin');
+  if (themeCatppuccin) themeCatppuccin.textContent = t.themeCatppuccin;
+  
+  const themeDracula = document.getElementById('theme-dracula');
+  if (themeDracula) themeDracula.textContent = t.themeDracula;
+  
+  const themeOled = document.getElementById('theme-oled');
+  if (themeOled) themeOled.textContent = t.themeOled;
+  
+  const highlightColorsLabel = document.getElementById('sidebar-highlight-colors');
+  if (highlightColorsLabel) highlightColorsLabel.textContent = t.highlightColors;
+  
+  const colorBlue = document.getElementById('color-blue');
+  if (colorBlue) colorBlue.textContent = t.colorBlue;
+  
+  const colorPurple = document.getElementById('color-purple');
+  if (colorPurple) colorPurple.textContent = t.colorPurple;
+  
+  const colorCyan = document.getElementById('color-cyan');
+  if (colorCyan) colorCyan.textContent = t.colorCyan;
+  
+  const colorGreen = document.getElementById('color-green');
+  if (colorGreen) colorGreen.textContent = t.colorGreen;
+  
+  const colorOrange = document.getElementById('color-orange');
+  if (colorOrange) colorOrange.textContent = t.colorOrange;
+  
+  const languageLabel = document.getElementById('sidebar-language');
+  if (languageLabel) languageLabel.textContent = t.language;
+  
+  const langEn = document.getElementById('lang-en');
+  if (langEn) langEn.textContent = lang === 'en' ? 'English' : (lang === 'pt' ? 'Inglês' : 'Inglés');
+  
+  const langPt = document.getElementById('lang-pt');
+  if (langPt) langPt.textContent = lang === 'en' ? 'Portuguese' : (lang === 'pt' ? 'Português' : 'Portugués');
+  
+  const langEs = document.getElementById('lang-es');
+  if (langEs) langEs.textContent = lang === 'en' ? 'Spanish' : (lang === 'pt' ? 'Espanhol' : 'Español');
+  
+  const fontLabel = document.getElementById('sidebar-font');
+  if (fontLabel) fontLabel.textContent = t.font;
+  
+  const fontInter = document.getElementById('font-inter');
+  if (fontInter) fontInter.textContent = 'Inter';
+  
+  const fontRoboto = document.getElementById('font-roboto');
+  if (fontRoboto) fontRoboto.textContent = 'Roboto';
+  
+  const fontOpensans = document.getElementById('font-opensans');
+  if (fontOpensans) fontOpensans.textContent = 'Open Sans';
+  
+  const videoSizeLabel = document.getElementById('sidebar-video-size');
+  if (videoSizeLabel) videoSizeLabel.textContent = t.videoSize;
+  
+  const sizeSmall = document.getElementById('size-small');
+  if (sizeSmall) sizeSmall.textContent = t.sizeSmall;
+  
+  const sizeMedium = document.getElementById('size-medium');
+  if (sizeMedium) sizeMedium.textContent = t.sizeMedium;
+  
+  const sizeLarge = document.getElementById('size-large');
+  if (sizeLarge) sizeLarge.textContent = t.sizeLarge;
+  
+  const orderLabel = document.querySelector('.setup-options .field-label');
+  if (orderLabel) orderLabel.textContent = t.orderLabel;
+  
+  const orderRandom = document.getElementById('order-random');
+  if (orderRandom) orderRandom.textContent = t.orderRandom;
+  
+  const orderKeep = document.getElementById('order-keep');
+  if (orderKeep) orderKeep.textContent = t.orderKeep;
+}
+
+// Apply initial language
+const currentLang = localStorage.getItem('bracket-lang') || 'en';
+applyLanguage(currentLang);
 
 /* init */
 updateParsedPreview();
